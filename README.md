@@ -1,8 +1,8 @@
-# Wunderbyte Interface #
+# Wunderbyte Reports #
 
-TODO Describe the plugin shortly here.
-
-TODO Provide more detailed description here.
+This is a plugin for Moodle reports.
+Each Moodle report can be added as a subplugin.
+Wunderbyte Reports uses Wunderbyte Table.
 
 ## Installing via uploaded ZIP file ##
 
