@@ -15,22 +15,23 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
+ * Cache definitions.
  *
- * @package     local_wb_reports
- * @category    string
- * @copyright   Wunderbyte GmbH 2024 <info@wunderbyte.at>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    wbreport_egusers
+ * @copyright  2024 Wunderbyte GmbH <info@wudnerbyte.at>
+ * @author     Bernhard Fischer-Sengseis
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$string['pluginname'] = 'Wunderbyte Reports';
+$definitions = array(
+    'wbreportseguserscache' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true,
+        'staticaccelerationsize' => 1,
+        'invalidationevents' => ['setbackwbreportseguserscache']
+    ),
+);
 
-// Access.
-$string['wb_reports:canmanage'] = "Darf Wunderbyte Reports bearbeiten";
-
-// General strings.
-$string['backtowbreports'] = 'Zurück zu Wunderbyte Reports';
-$string['dashboard'] = 'Dashboard (alle Berichte anzeigen)';
-$string['openreport'] = 'Bericht öffnen';

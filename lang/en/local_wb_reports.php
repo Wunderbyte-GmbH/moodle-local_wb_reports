@@ -32,4 +32,5 @@ $string['wb_reports:canmanage'] = "Can manage Wunderbyte Reports";
 
 // General strings.
 $string['backtowbreports'] = 'Back to Wunderbyte reports';
+$string['dashboard'] = 'Dashboard (Show all reports)';
 $string['openreport'] = 'Open report';

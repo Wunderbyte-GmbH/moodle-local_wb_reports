@@ -15,22 +15,19 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
+ * Class egusers.
  *
- * @package     local_wb_reports
- * @category    string
- * @copyright   Wunderbyte GmbH 2024 <info@wunderbyte.at>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     wbreport_egusers
+ * @copyright   2024 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
+ * @author      Bernhard Fischer-Sengseis
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace wbreport_egusers;
 
-$string['pluginname'] = 'Wunderbyte Reports';
+use local_wb_reports\plugininfo\wbreport;
+use local_wb_reports\plugininfo\wbreport_interface;
 
-// Access.
-$string['wb_reports:canmanage'] = "Darf Wunderbyte Reports bearbeiten";
-
-// General strings.
-$string['backtowbreports'] = 'Zurück zu Wunderbyte Reports';
-$string['dashboard'] = 'Dashboard (alle Berichte anzeigen)';
-$string['openreport'] = 'Bericht öffnen';
+class egusers extends wbreport implements wbreport_interface {
+    // The plugin can implement functions defined in the interface here or extend the general plugin type.
+}
