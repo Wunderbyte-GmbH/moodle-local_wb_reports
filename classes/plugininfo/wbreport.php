@@ -26,6 +26,7 @@ namespace local_wb_reports\plugininfo;
 use core\plugininfo\base;
 use part_of_admin_tree;
 use admin_settingpage;
+use coding_exception;
 use moodle_url;
 
 /**
@@ -105,16 +106,44 @@ class wbreport extends base {
         parent::uninstall_cleanup();
     }
 
+    /**
+     * Get report title.
+     * @param string $reportidentifier
+     * @return string the report title
+     * @throws coding_exception
+     */
     public function get_report_title(string $reportidentifier) {
         return get_string('pluginname', 'wbreport_' . $reportidentifier);
     }
 
+    /**
+     * Get report description.
+     * @param string $reportidentifier
+     * @return string the report description
+     * @throws coding_exception
+     */
     public function get_report_description(string $reportidentifier) {
         return get_string('description', 'wbreport_' . $reportidentifier);
     }
 
+    /**
+     * Get report link.
+     * @param string $reportidentifier
+     * @return string the report link
+     * @throws coding_exception
+     */
     public function get_report_link(string $reportidentifier) {
         $moodleurl = new moodle_url('/local/wb_reports/wbreport/' . $reportidentifier . '/report.php');
+        return $moodleurl->out(false);
+    }
+
+    /**
+     * Get dashboard link.
+     * @return string the dashboard link
+     * @throws coding_exception
+     */
+    public function get_dashboard_link() {
+        $moodleurl = new moodle_url('/local/wb_reports/dashboard.php');
         return $moodleurl->out(false);
     }
 }

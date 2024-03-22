@@ -16,6 +16,7 @@
 
 namespace local_wb_reports\output;
 use plugin_renderer_base;
+use local_wb_reports\plugininfo\wbreport_interface;
 
 /**
  * A custom renderer class that extends the plugin_renderer_base.
@@ -35,6 +36,17 @@ class renderer extends plugin_renderer_base {
         $o = '';
         $data = $data->export_for_template($this);
         $o .= $this->render_from_template('local_wb_reports/dashboard', $data);
+        return $o;
+    }
+
+    /** Function to render a report
+     * @param wbreport_interface $data
+     * @return string
+     */
+    public function render_report(wbreport_interface $data) {
+        $o = '';
+        $data = $data->export_for_template($this);
+        $o .= $this->render_from_template('local_wb_reports/report', $data);
         return $o;
     }
 }

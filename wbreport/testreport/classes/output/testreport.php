@@ -25,6 +25,8 @@
 
 namespace wbreport_testreport\output;
 
+use local_wb_reports\plugininfo\wbreport;
+use local_wb_reports\plugininfo\wbreport_interface;
 use stdClass;
 use local_wunderbyte_table\filters\types\standardfilter;
 use renderer_base;
@@ -40,7 +42,7 @@ use wbreport_testreport\table\testreport_table;
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class testreport implements renderable, templatable {
+class testreport implements renderable, templatable, wbreport_interface {
 
     /**
      * @var array $tabledata
@@ -104,6 +106,8 @@ class testreport implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
+        $wbreport = new wbreport();
+        $data->dashboardlink = $wbreport->get_dashboard_link();
         $data->table = $this->tabledata;
         return $data;
     }

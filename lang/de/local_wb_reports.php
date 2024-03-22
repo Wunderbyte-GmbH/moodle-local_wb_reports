@@ -31,4 +31,5 @@ $string['pluginname'] = 'Wunderbyte Reports';
 $string['wb_reports:canmanage'] = "Darf Wunderbyte Reports bearbeiten";
 
 // General strings.
+$string['backtowbreports'] = 'Zurück zu Wunderbyte Reports';
 $string['openreport'] = 'Bericht öffnen';

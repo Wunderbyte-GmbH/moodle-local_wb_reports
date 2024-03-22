@@ -43,11 +43,11 @@ $PAGE->set_url($url);
 $PAGE->set_title($title);
 $PAGE->set_heading(get_string('pluginname', 'wbreport_testreport'));
 
-$output = $PAGE->get_renderer('wbreport_testreport');
+$output = $PAGE->get_renderer('local_wb_reports');
 
 echo $output->header();
 
 $data = new testreport();
-echo $output->render_testreport($data);
+echo $output->render_report($data);
 
 echo $output->footer();
