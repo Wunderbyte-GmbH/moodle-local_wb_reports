@@ -26,6 +26,7 @@ namespace local_wb_reports\plugininfo;
 use core\plugininfo\base;
 use part_of_admin_tree;
 use admin_settingpage;
+use moodle_url;
 
 /**
  * Models subplugin define classes.
@@ -87,7 +88,7 @@ class wbreport extends base {
         }
 
         $section = $this->get_settings_section_name();
-        $page = new admin_settingpage($section, $this->displayname, 'moodle/site:config', $this->is_enabled() === false);
+        $page = new admin_settingpage($section, $this->displayname);
         include($this->full_path('settings.php')); // This may also set $settings to null.
 
         if ($page) {
@@ -104,4 +105,16 @@ class wbreport extends base {
         parent::uninstall_cleanup();
     }
 
+    public function get_report_title(string $reportidentifier) {
+        return get_string('pluginname', 'wbreport_' . $reportidentifier);
+    }
+
+    public function get_report_description(string $reportidentifier) {
+        return get_string('description', 'wbreport_' . $reportidentifier);
+    }
+
+    public function get_report_link(string $reportidentifier) {
+        $moodleurl = new moodle_url('/local/wb_reports/wbreport/' . $reportidentifier . '/report.php');
+        return $moodleurl->out(false);
+    }
 }

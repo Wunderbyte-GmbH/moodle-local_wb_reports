@@ -23,3 +23,6 @@
  */
 
 $string['pluginname'] = 'Wunderbyte Reports: Testbericht';
+$string['description'] = 'Dies ist ein Testbericht. Berichte können einzeln als
+Subplugins zum Wunderbyte Report-Plugin dazu-installiert werden.';
+

@@ -29,3 +29,6 @@ $string['pluginname'] = 'Wunderbyte Reports';
 
 // Access.
 $string['wb_reports:canmanage'] = "Can manage Wunderbyte Reports";
+
+// General strings.
+$string['openreport'] = 'Open report';

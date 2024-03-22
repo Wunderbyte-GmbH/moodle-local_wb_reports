@@ -15,13 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains language strings for the subplugin.
+ * Interface for a single report.
  *
- * @package     wbreport_testreport
- * @copyright   2023 Georg Maißer <info@wunderbyte.at>
+ * All reports must extend this class.
+ *
+ * @package     local_wb_reports
+ * @copyright   2024 Wunderbyte GmbH
+ * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+ namespace local_wb_reports\plugininfo;
 
-$string['pluginname'] = 'Wunderbyte Reports: Test report';
-$string['description'] = 'This is a test report. Reports can be added
-individually as subplugins to the Wunderbyte Reports plugin.';
+/**
+ * Interface for a single report.
+ *
+ * All reports must extend this class.
+ *
+ * @package     local_wb_reports
+ * @copyright   2024 Wunderbyte GmbH
+ * @author      Bernhard Fischer-Sengseis
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface wbreport_interface {
+
+    // We can use this later to define functions which need to be implemented by EVERY report.
+
+}
