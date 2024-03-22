@@ -21,7 +21,9 @@
  * @copyright   2023 Georg Maißer <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['pluginname'] = 'EG Group: Nutzer:innen-Bericht';
+$string['reportidentifier'] = 'egusers';
+$string['description'] = 'Mit diesem Bericht lässt sich der Lernfortschritt beliebiger Nutzer:innen einsehen. Sie können auch nach der PBL suchen.';
 
- $string['pluginname'] = 'EG Group: Nutzer:innen-Bericht';
- $string['description'] = 'Mit diesem Bericht lässt sich der Lernfortschritt beliebiger Nutzer:innen einsehen. Sie können auch nach der PBL suchen.';
-
+// Cache.
+$string['cachedef_wbreports' . $string['reportidentifier'] . 'cache'] = $string['pluginname'] . ' (Cache)';

@@ -23,4 +23,8 @@
  */
 
 $string['pluginname'] = 'EG Group: Users report';
+$string['reportidentifier'] = 'egusers';
 $string['description'] = 'Have a look at the learning progress of your users. Searching by PBL is possible.';
+
+// Cache.
+$string['cachedef_wbreports' . $string['reportidentifier'] . 'cache'] = $string['pluginname'] . ' (cache)';
