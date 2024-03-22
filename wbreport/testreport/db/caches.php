@@ -15,19 +15,23 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Class testreport.
+ * Cache definitions.
  *
- * @package     wbreport_testreport
- * @copyright   2024 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
- * @author      Bernhard Fischer-Sengseis
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    wbreport_testreport
+ * @copyright  2024 Wunderbyte GmbH <info@wudnerbyte.at>
+ * @author     Bernhard Fischer-Sengseis
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace wbreport_testreport;
+defined('MOODLE_INTERNAL') || die;
 
-use local_wb_reports\plugininfo\wbreport;
-use local_wb_reports\plugininfo\wbreport_interface;
+$definitions = array(
+    'wbreportstestreportcache' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true,
+        'staticaccelerationsize' => 1,
+        'invalidationevents' => ['setbackwbreportstestreportcache']
+    ),
+);
 
-class testreport extends wbreport implements wbreport_interface {
-    // The plugin can implement functions defined in the interface here or extend the general plugin type.
-}
