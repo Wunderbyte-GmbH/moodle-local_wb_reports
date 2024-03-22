@@ -25,6 +25,7 @@
 
 namespace wbreport_testreport\output;
 
+use cache_helper;
 use local_wb_reports\plugininfo\wbreport;
 use local_wb_reports\plugininfo\wbreport_interface;
 use stdClass;
@@ -32,7 +33,7 @@ use local_wunderbyte_table\filters\types\standardfilter;
 use renderer_base;
 use renderable;
 use templatable;
-use wbreport_testreport\table\testreport_table;
+use wbreport_testreport\local\table\testreport_table;
 
 /**
  * This class prepares data for the report.
@@ -53,6 +54,8 @@ class testreport implements renderable, templatable, wbreport_interface {
      * In the constructor, we gather all the data we need.
      */
     public function __construct() {
+
+        cache_helper::purge_by_event('setbackwbreportscache');
 
         // Create instance of transactions wb_table and specify columns and headers.
         $table = new testreport_table('testreport_table');
@@ -89,7 +92,7 @@ class testreport implements renderable, templatable, wbreport_interface {
         // Sortable columns.
         $table->define_sortablecolumns(['id', 'firstname', 'lastname']);
 
-        $table->define_cache('wbreport_testreport', 'wbreportstestreportcache');
+        $table->define_cache('local_wb_reports', 'wbreportscache');
 
         $table->pageable(true);
 

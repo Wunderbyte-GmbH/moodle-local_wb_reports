@@ -30,6 +30,9 @@ $string['pluginname'] = 'Wunderbyte Reports';
 // Access.
 $string['wb_reports:canmanage'] = "Can manage Wunderbyte Reports";
 
+// Cache.
+$string['cachedef_wbreportscache'] = 'Wunderbyte Reports Cache';
+
 // General strings.
 $string['backtowbreports'] = 'Back to Wunderbyte reports';
 $string['dashboard'] = 'Dashboard (Show all reports)';

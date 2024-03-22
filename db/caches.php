@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Mobile cache definitions.
+ * Cache definitions.
  *
  * @package    local_wb_reports
  * @copyright  2024 Georg Maißer <info@wunderbyte.at>
@@ -24,5 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$definitions = [];
-
+$definitions = array(
+    'wbreportscache' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true,
+        'staticaccelerationsize' => 1,
+        'invalidationevents' => ['setbackwbreportscache']
+    ),
+);

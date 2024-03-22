@@ -24,6 +24,3 @@
 $string['pluginname'] = 'EG Group: Nutzer:innen-Bericht';
 $string['reportidentifier'] = 'egusers';
 $string['description'] = 'Mit diesem Bericht lässt sich der Lernfortschritt beliebiger Nutzer:innen einsehen. Sie können auch nach der PBL suchen.';
-
-// Cache.
-$string['cachedef_wbreports' . $string['reportidentifier'] . 'cache'] = $string['pluginname'] . ' (Cache)';

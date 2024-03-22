@@ -26,6 +26,3 @@ $string['pluginname'] = 'Wunderbyte Reports: Testbericht';
 $string['reportidentifier'] = 'testreport';
 $string['description'] = 'Dies ist ein Testbericht. Berichte können einzeln als
 Subplugins zum Wunderbyte Report-Plugin dazu-installiert werden.';
-
-// Cache.
-$string['cachedef_wbreports' . $string['reportidentifier'] . 'cache'] = $string['pluginname'] . ' (Cache)';

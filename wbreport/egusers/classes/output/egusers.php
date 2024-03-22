@@ -25,6 +25,7 @@
 
 namespace wbreport_egusers\output;
 
+use cache_helper;
 use local_wb_reports\plugininfo\wbreport;
 use local_wb_reports\plugininfo\wbreport_interface;
 use stdClass;
@@ -32,7 +33,7 @@ use local_wunderbyte_table\filters\types\standardfilter;
 use renderer_base;
 use renderable;
 use templatable;
-use wbreport_egusers\table\egusers_table;
+use wbreport_egusers\local\table\egusers_table;
 
 /**
  * This class prepares data for the report.
@@ -53,6 +54,8 @@ class egusers implements renderable, templatable, wbreport_interface {
      * In the constructor, we gather all the data we need.
      */
     public function __construct() {
+
+        cache_helper::purge_by_event('setbackwbreportscache');
 
         // Create instance of transactions wb_table and specify columns and headers.
         $table = new egusers_table('egusers_table');
@@ -101,7 +104,7 @@ class egusers implements renderable, templatable, wbreport_interface {
         // Sortable columns.
         $table->define_sortablecolumns(['firstname', 'lastname', 'pbl']);
 
-        $table->define_cache('wbreport_egusers', 'wbreportseguserscache');
+        $table->define_cache('local_wb_reports', 'wbreportscache');
 
         $table->pageable(true);
 
