@@ -24,3 +24,19 @@
 $string['pluginname'] = 'EG Group: Nutzer:innen-Bericht';
 $string['reportidentifier'] = 'egusers';
 $string['description'] = 'Mit diesem Bericht lässt sich der Lernfortschritt beliebiger Nutzer:innen einsehen. Sie können auch nach der PBL suchen.';
+
+// General strings.
+$string['complcount'] = 'Abgeschlossen';
+$string['infotext:tableheader'] = '<b>Beschreibung:</b>
+<table class="border-0">
+    <tr>
+        <td><b>✅ Checkboxen</b></td><td>&nbsp;... Anzahl abgeschlossener Aktivitäten innerhalb eines Kurses.</td>
+    </tr>
+    <tr>
+        <td><b>◯ Kreise</b></td><td>&nbsp;... Anzahl noch offener Aktivitäten (noch nicht als abgeschlossen markiert).</td>
+    </tr>
+</table>';
+$string['pbl'] = 'PBL';
+$string['pp'] = 'Teilnahme am Partnerprogramm';
+$string['tenant'] = 'Mandant';
+$string['ispartner'] = 'Ist Partner-Admin';

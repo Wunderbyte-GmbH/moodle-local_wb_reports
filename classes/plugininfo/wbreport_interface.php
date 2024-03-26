@@ -24,7 +24,10 @@
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- namespace local_wb_reports\plugininfo;
+namespace local_wb_reports\plugininfo;
+
+use renderer_base;
+use stdClass;
 
 /**
  * Interface for a single report.
@@ -38,6 +41,16 @@
  */
 interface wbreport_interface {
 
-    // We can use this later to define functions which need to be implemented by EVERY report.
+    /**
+     * Export this data so it can be used as the context for a mustache template.
+     * @return stdClass
+     */
+    public function export_for_template(renderer_base $output): stdClass;
+
+    /**
+     * Use this function to render any HTML in the report header.
+     * @return string the html for the table header
+     * */
+    public function get_table_header_html(): string;
 
 }

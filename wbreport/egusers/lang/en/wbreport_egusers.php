@@ -21,7 +21,22 @@
  * @copyright   2023 Georg Maißer <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 $string['pluginname'] = 'EG Group: Users report';
 $string['reportidentifier'] = 'egusers';
 $string['description'] = 'Have a look at the learning progress of your users. Searching by PBL is possible.';
+
+// General strings.
+$string['complcount'] = 'Completed';
+$string['infotext:tableheader'] = '<b>Description:</b>
+<table class="border-0">
+    <tr>
+        <td><b>✅ Checkboxes</b></td><td>&nbsp;... number of completed activities within a course.</td>
+    </tr>
+    <tr>
+        <td><b>◯ Circles</b></td><td>&nbsp;... number of activities that have not yet been marked as completed.</td>
+    </tr>
+</table>';
+$string['pbl'] = 'PBL';
+$string['pp'] = 'In partner program';
+$string['tenant'] = 'Tenant';
+$string['ispartner'] = 'Is partner admin';

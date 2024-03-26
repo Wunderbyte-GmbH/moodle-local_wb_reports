@@ -35,5 +35,10 @@ $string['cachedef_wbreportscache'] = 'Wunderbyte Reports Cache';
 
 // General strings.
 $string['backtowbreports'] = 'Zurück zu Wunderbyte Reports';
+$string['courseid'] = 'Kurs-ID';
+$string['coursename'] = 'Kurs';
+$string['coursestart'] = 'Kursstart';
+$string['courseend'] = 'Kursende';
 $string['dashboard'] = 'Dashboard (alle Berichte anzeigen)';
 $string['openreport'] = 'Bericht öffnen';
+$string['userid'] = 'Nutzer-ID';

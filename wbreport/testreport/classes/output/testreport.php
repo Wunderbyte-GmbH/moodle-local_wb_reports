@@ -103,6 +103,14 @@ class testreport implements renderable, templatable, wbreport_interface {
     }
 
     /**
+     * Use this function to render any HTML in the report header.
+     * @return string the html for the table header
+     * */
+    public function get_table_header_html(): string {
+        return '<div class="alert alert-info">You can show a table header here.</div>';
+    }
+
+    /**
      * Export this data so it can be used as the context for a mustache template.
      *
      * @return stdClass
@@ -111,6 +119,7 @@ class testreport implements renderable, templatable, wbreport_interface {
         $data = new stdClass();
         $wbreport = new wbreport();
         $data->dashboardlink = $wbreport->get_dashboard_link();
+        $data->tableheader = $this->get_table_header_html();
         $data->table = $this->tabledata;
         return $data;
     }
