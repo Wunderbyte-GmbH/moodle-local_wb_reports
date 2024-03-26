@@ -89,71 +89,74 @@ class egusers implements renderable, templatable, wbreport_interface {
         ]);
 
         // Define SQL here.
-        $fields = $DB->sql_concat("c.id", "'-'", "u.id") . " AS uniqueid,
-            c.id courseid, c.fullname, c.startdate,
-            u.id userid, u.firstname, u.lastname,
-            s1.pbl, s4.pp, s5.tenant,
-            CASE
-                WHEN s6.ispartner IS NULL THEN 'X'
-                ELSE s6.ispartner
-            END AS ispartner,
-            s2.complcount, s3.modcount";
+        $fields = "m.*";
 
-        $from = "{course} c
-            JOIN {enrol} e ON c.id = e.courseid
-            JOIN {user_enrolments} ue ON e.id = ue.enrolid
-            JOIN {user} u ON u.id = ue.userid
-            LEFT JOIN (
-                SELECT userid, data AS pbl
-                FROM {user_info_data} uid
-                WHERE fieldid = (SELECT id
-                FROM {user_info_field} uif
-                WHERE name LIKE '%PBL%'
-                LIMIT 1)
-            ) s1
-            ON s1.userid = u.id
-            LEFT JOIN (
-                SELECT cm.course, cmc.userid, COUNT(cmc.completionstate) AS complcount
-                FROM {course_modules} cm
-                JOIN {course_modules_completion} cmc ON cmc.coursemoduleid = cm.id
-                WHERE cmc.completionstate = 1
-                GROUP BY cm.course, cmc.userid
-            ) s2
-            ON s2.userid = u.id AND s2.course = c.id
-            LEFT JOIN (
-                SELECT course, count(*) modcount
-                FROM {course_modules}
-                WHERE visible = 1 AND completion > 0
-                GROUP BY course
-            ) s3
-            ON s3.course = c.id
-            LEFT JOIN (
-                SELECT userid, data AS pp
-                FROM {user_info_data} uid
-                WHERE fieldid = (SELECT id
-                FROM {user_info_field} uif
-                WHERE shortname LIKE '%artner%ogram%' -- Partnerprogramm, use pattern to be safe.
-                LIMIT 1)
-            ) s4
-            ON s4.userid = u.id
-            LEFT JOIN (
-                SELECT userid, data AS tenant
-                FROM {user_info_data} uid
-                WHERE fieldid = (SELECT id
-                FROM {user_info_field} uif
-                WHERE shortname = 'tenant'
-                LIMIT 1)
-            ) s5
-            ON s5.userid = u.id
-            LEFT JOIN (
-                SELECT userid, data AS ispartner
-                FROM {user_info_data} uid
-                WHERE fieldid = (SELECT id
-                FROM {user_info_field} uif
-                WHERE shortname = 'ispartner' -- Partnerprogramm, use pattern to be safe.
-                LIMIT 1)
-            ) s6
-            ON s6.userid = u.id";
+        $from = "(SELECT " . $DB->sql_concat("c.id", "'-'", "u.id") .
+                " AS uniqueid,
+                c.id courseid, c.fullname, c.startdate,
+                u.id userid, u.firstname, u.lastname,
+                s1.pbl, s4.pp, s5.tenant,
+                CASE
+                    WHEN s6.ispartner IS NULL THEN '0'
+                    ELSE s6.ispartner
+                END ispartner,
+                s2.complcount, s3.modcount
+                FROM {course} c
+                JOIN {enrol} e ON c.id = e.courseid
+                JOIN {user_enrolments} ue ON e.id = ue.enrolid
+                JOIN {user} u ON u.id = ue.userid
+                LEFT JOIN (
+                    SELECT userid, data AS pbl
+                    FROM {user_info_data} uid
+                    WHERE fieldid = (SELECT id
+                    FROM {user_info_field} uif
+                    WHERE name LIKE '%PBL%'
+                    LIMIT 1)
+                ) s1
+                ON s1.userid = u.id
+                LEFT JOIN (
+                    SELECT cm.course, cmc.userid, COUNT(cmc.completionstate) AS complcount
+                    FROM {course_modules} cm
+                    JOIN {course_modules_completion} cmc ON cmc.coursemoduleid = cm.id
+                    WHERE cmc.completionstate = 1
+                    GROUP BY cm.course, cmc.userid
+                ) s2
+                ON s2.userid = u.id AND s2.course = c.id
+                LEFT JOIN (
+                    SELECT course, count(*) modcount
+                    FROM {course_modules}
+                    WHERE visible = 1 AND completion > 0
+                    GROUP BY course
+                ) s3
+                ON s3.course = c.id
+                LEFT JOIN (
+                    SELECT userid, data AS pp
+                    FROM {user_info_data} uid
+                    WHERE fieldid = (SELECT id
+                    FROM {user_info_field} uif
+                    WHERE shortname LIKE '%artner%ogram%' -- Partnerprogramm, use pattern to be safe.
+                    LIMIT 1)
+                ) s4
+                ON s4.userid = u.id
+                LEFT JOIN (
+                    SELECT userid, data AS tenant
+                    FROM {user_info_data} uid
+                    WHERE fieldid = (SELECT id
+                    FROM {user_info_field} uif
+                    WHERE shortname = 'tenant'
+                    LIMIT 1)
+                ) s5
+                ON s5.userid = u.id
+                LEFT JOIN (
+                    SELECT userid, data AS ispartner
+                    FROM {user_info_data} uid
+                    WHERE fieldid = (SELECT id
+                    FROM {user_info_field} uif
+                    WHERE shortname = 'ispartner' -- Partnerprogramm, use pattern to be safe.
+                    LIMIT 1)
+                ) s6
+                ON s6.userid = u.id
+            ) m";
 
         $where = '1 = 1';
 
@@ -181,6 +184,10 @@ class egusers implements renderable, templatable, wbreport_interface {
         $table->add_filter($standardfilter);
 
         $standardfilter = new standardfilter('ispartner', get_string('ispartner', 'wbreport_egusers'));
+        $standardfilter->add_options([
+            '1' => '✅',
+            '0' => '❌',
+        ]);
         $table->add_filter($standardfilter);
 
         $standardfilter = new standardfilter('complcount', get_string('complcount', 'wbreport_egusers'));
