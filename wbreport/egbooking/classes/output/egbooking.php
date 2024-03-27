@@ -153,7 +153,7 @@ class egbooking implements renderable, templatable, wbreport_interface {
                 ON s5.userid = u.id
                 LEFT JOIN (
                     SELECT DISTINCT ba.userid, " .
-                    wbreport::string_agg($DB->sql_concat('bo.text', "' (ID: '", 'bo.id', "')'"), '&emsp;<br>') . "
+                    wbreport::string_agg($DB->sql_concat('bo.text', "' (ID: '", 'bo.id', "')'"), '; ') . "
                     AS bookedoptions
                     FROM {booking_answers} ba
                     JOIN {booking_options} bo
@@ -171,7 +171,7 @@ class egbooking implements renderable, templatable, wbreport_interface {
                 ON s7.userid = u.id
                 LEFT JOIN (
                     SELECT DISTINCT ba.userid, " .
-                    wbreport::string_agg($DB->sql_concat('bo.text', "' (ID: '", 'bo.id', "')'"), '&emsp;<br>') . "
+                    wbreport::string_agg($DB->sql_concat('bo.text', "' (ID: '", 'bo.id', "')'"), '; ') . "
                     AS canceledoptions
                     FROM {booking_answers} ba
                     JOIN {booking_options} bo

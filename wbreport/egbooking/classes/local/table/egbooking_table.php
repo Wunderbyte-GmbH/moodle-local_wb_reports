@@ -32,58 +32,6 @@ class egbooking_table extends wunderbyte_table {
 
     /**
      * This function is called for each data row to allow processing of the
-     * "startdate" value.
-     *
-     * @param object $values Contains object with all the values of record.
-     * @return string a string containing the start date
-     * @throws coding_exception
-     */
-    public function col_startdate($values) {
-        $startdate = $values->startdate;
-        if (empty($startdate)) {
-            return '';
-        }
-        switch (current_language()) {
-            case 'de':
-                $renderedstartdate = date('d.m.Y', $startdate);
-                break;
-            default:
-                $renderedstartdate = date('M d, Y', $startdate);
-                break;
-        }
-        return $renderedstartdate;
-    }
-
-    /**
-     * This function is called for each data row to allow processing of the
-     * "complcount" value.
-     *
-     * @param object $values Contains object with all the values of record.
-     * @return string a string showing the completion count
-     * @throws coding_exception
-     */
-    public function col_complcount($values) {
-        $complcount = $values->complcount ?? 0; // Number of completed modules.
-        $modcount = $values->modcount ?? 0; // Number of modules.
-        if (empty($complcount) && empty($modcount)) {
-            return '';
-        }
-        if ($this->is_downloading()) {
-            return "$complcount/$modcount";
-        }
-        $ret = '';
-        if (!empty($complcount) && $complcount > 0) {
-            $ret .= str_repeat('✅ ', $complcount);
-            $ret .= str_repeat('◯ ', $modcount - $complcount);
-        } else if (!empty($modcount) && $modcount > 0) {
-            $ret .= str_repeat('◯ ', $modcount);
-        }
-
-        return $ret;
-    }
-
-    /**
-     * This function is called for each data row to allow processing of the
      * "ispartner" value.
      *
      * @param object $values Contains object with all the values of record.
@@ -101,6 +49,40 @@ class egbooking_table extends wunderbyte_table {
             $ret = '❌';
         }
 
+        return $ret;
+    }
+
+    /**
+     * This function is called for each data row to allow processing of the
+     * "bookedoptions" value.
+     *
+     * @param object $values Contains object with all the values of record.
+     * @return string a string showing the completion count
+     * @throws coding_exception
+     */
+    public function col_bookedoptions($values) {
+        $bookedoptions = $values->bookedoptions;
+        if ($this->is_downloading()) {
+            return $bookedoptions;
+        }
+        $ret = str_replace(';', '<br>', $bookedoptions);
+        return $ret;
+    }
+
+    /**
+     * This function is called for each data row to allow processing of the
+     * "canceledoptions" value.
+     *
+     * @param object $values Contains object with all the values of record.
+     * @return string a string showing the completion count
+     * @throws coding_exception
+     */
+    public function col_canceledoptions($values) {
+        $canceledoptions = $values->canceledoptions;
+        if ($this->is_downloading()) {
+            return $canceledoptions;
+        }
+        $ret = str_replace(';', '<br>', $canceledoptions);
         return $ret;
     }
 }
