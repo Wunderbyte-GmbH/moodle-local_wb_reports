@@ -14,21 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace wbreport_testreport\local\table;
-
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG;
-require_once($CFG->libdir.'/tablelib.php');
-
-use local_wunderbyte_table\wunderbyte_table;
-
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * Definitions for transactionstable iteration of wb_table
+ * This file contains the version information for the 1plraschbirnbaum model catquiz plugin
+ *
+ * @package     wbreport_egbooking
+ * @copyright   2024 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class testreport_table extends wunderbyte_table {
 
-    // TODO: Add col_functions and action_functions here.
-}
+defined('MOODLE_INTERNAL') || die();
+
+$plugin->version   = 2024032100;
+$plugin->requires  = 2022041900;
+$plugin->component = 'wbreport_egbooking';

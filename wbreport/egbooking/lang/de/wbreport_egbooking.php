@@ -17,12 +17,22 @@
 /**
  * This file contains language strings for the subplugin.
  *
- * @package     wbreport_testreport
+ * @package     wbreport_egbooking
  * @copyright   2023 Georg Maißer <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['pluginname'] = 'EG Group: Bericht Online-Seminare';
+$string['reportidentifier'] = 'egbooking';
+$string['description'] = 'In diesem Bericht erhalten Sie einen Überblick über gebuchte und stornierte Online-Seminare Ihrer Nutzer:innen.';
 
-$string['pluginname'] = 'Wunderbyte Reports: Testbericht';
-$string['reportidentifier'] = 'testreport';
-$string['description'] = 'Dies ist ein Testbericht. Berichte können einzeln als
-Subplugins zum Wunderbyte Report-Plugin dazu-installiert werden.';
+// General strings.
+$string['complcount'] = 'Abgeschlossen';
+$string['infotext:tableheader'] = $string['description'];
+$string['pbl'] = 'PBL';
+$string['pp'] = 'Teilnahme am Partnerprogramm';
+$string['tenant'] = 'Mandant';
+$string['ispartner'] = 'Ist Partner-Admin';
+$string['countbooked'] = 'Anz. gebuchter Online-Seminare';
+$string['bookedoptions'] = 'Gebuchte Online-Seminare';
+$string['countcanceled'] = 'Anz. stornierter Online-Seminare';
+$string['canceledoptions'] = 'Stornierte Online-Seminare';

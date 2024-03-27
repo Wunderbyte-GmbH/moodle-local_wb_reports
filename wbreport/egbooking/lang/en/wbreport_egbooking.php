@@ -17,12 +17,22 @@
 /**
  * This file contains language strings for the subplugin.
  *
- * @package     wbreport_testreport
+ * @package     wbreport_egbooking
  * @copyright   2023 Georg Maißer <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['pluginname'] = 'EG Group: Booking report';
+$string['reportidentifier'] = 'egbooking';
+$string['description'] = 'In this report you get an overview of booked and cancelled online courses of your users.';
 
-$string['pluginname'] = 'Wunderbyte Reports: Test report';
-$string['reportidentifier'] = 'testreport';
-$string['description'] = 'This is a test report. Reports can be added
-individually as subplugins to the Wunderbyte Reports plugin.';
+// General strings.
+$string['complcount'] = 'Completed';
+$string['infotext:tableheader'] = $string['description'];
+$string['pbl'] = 'PBL';
+$string['pp'] = 'In partner program';
+$string['tenant'] = 'Tenant';
+$string['ispartner'] = 'Is partner admin';
+$string['countbooked'] = 'No. booked online courses';
+$string['bookedoptions'] = 'Booked online courses';
+$string['countcanceled'] = 'No. canceled courses';
+$string['canceledoptions'] = 'Canceled online courses';

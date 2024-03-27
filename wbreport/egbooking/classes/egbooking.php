@@ -15,19 +15,19 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Class testreport.
+ * Class egbooking.
  *
- * @package     wbreport_testreport
+ * @package     wbreport_egbooking
  * @copyright   2024 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace wbreport_testreport;
+namespace wbreport_egbooking;
 
 use local_wb_reports\plugininfo\wbreport;
 use local_wb_reports\plugininfo\wbreport_interface;
 
-class testreport extends wbreport implements wbreport_interface {
+class egbooking extends wbreport implements wbreport_interface {
     // The plugin can implement functions defined in the interface here or extend the general plugin type.
 }

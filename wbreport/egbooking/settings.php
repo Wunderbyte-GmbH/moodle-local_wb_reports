@@ -17,14 +17,14 @@
 /**
  * Plugin administration pages are defined here.
  *
- * @package     wbreport_testreport
+ * @package     wbreport_egbooking
  * @category    admin
  * @copyright   Wunderbyte GmbH 2024 <info@wunderbyte.at>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
-$componentname = 'wbreport_testreport';
+$componentname = 'wbreport_egbooking';
 
 // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
 /*

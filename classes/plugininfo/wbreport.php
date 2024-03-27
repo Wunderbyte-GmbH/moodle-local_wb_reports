@@ -146,4 +146,71 @@ class wbreport extends base {
         $moodleurl = new moodle_url('/local/wb_reports/dashboard.php');
         return $moodleurl->out(false);
     }
+
+    /**
+     * Helper function for string aggregation
+     * (copied from Moodle report builder and slightly adapted to pass $separator).
+     *
+     * @param string $field
+     * @param string $separator
+     * @return string
+     */
+    public static function string_agg(string $field, string $separator): string {
+        global $DB;
+
+        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+        $fieldsort = self::sql_group_concat_sort($field);
+
+        // Postgres handles group concatenation differently in that it requires the expression to be cast to char, so we can't
+        // simply pass "DISTINCT {$field}" to the {@see \moodle_database::sql_group_concat} method in all cases.
+        if ($DB->get_dbfamily() === 'postgres') {
+            $field = $DB->sql_cast_to_char($field);
+            if ($fieldsort !== '') {
+                $fieldsort = "ORDER BY {$fieldsort}";
+            }
+
+            return "STRING_AGG(DISTINCT {$field}, '" . $separator . "' {$fieldsort})";
+        } else {
+            return $DB->sql_group_concat("DISTINCT {$field}", $fieldsort);
+        }
+    }
+
+    /**
+     * Generate SQL expression for sorting group concatenated fields
+     *
+     * @param string $field The original field or SQL expression
+     * @param string|null $sort A valid SQL ORDER BY to sort the concatenated fields, if omitted then $field will be used
+     * @return string
+     */
+    public static function sql_group_concat_sort(string $field, string $sort = null): string {
+        global $DB;
+
+        // Fallback to sorting by the specified field, unless it contains parameters which would be duplicated.
+        if ($sort === null && !preg_match('/[:?$]/', $field)) {
+            $fieldsort = $field;
+        } else {
+            $fieldsort = $sort;
+        }
+
+        // Nothing to sort by.
+        if ($fieldsort === null) {
+            return '';
+        }
+
+        // If the sort specifies a direction, we need to handle that differently in Postgres.
+        if ($DB->get_dbfamily() === 'postgres') {
+            $fieldsortdirection = '';
+
+            preg_match('/(?<direction>ASC|DESC)?$/i', $fieldsort, $matches);
+            if (array_key_exists('direction', $matches)) {
+                $fieldsortdirection = $matches['direction'];
+                $fieldsort = core_text::substr($fieldsort, 0, -(core_text::strlen($fieldsortdirection)));
+            }
+
+            // Cast sort, stick the direction on the end.
+            $fieldsort = $DB->sql_cast_to_char($fieldsort) . ' ' . $fieldsortdirection;
+        }
+
+        return $fieldsort;
+    }
 }

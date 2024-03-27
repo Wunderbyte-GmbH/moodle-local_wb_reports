@@ -15,12 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package     wbreport_testreport
+ * @package     wbreport_egbooking
  * @copyright   2024 Wunderbyte GmbH <georg.maisser@wunderbyte.at>
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-use wbreport_testreport\output\testreport;
+use wbreport_egbooking\output\egbooking;
 
 require_once(__DIR__ . '/../../../../config.php');
 
@@ -33,25 +33,22 @@ if (!$context = context_system::instance()) {
     throw new moodle_exception('badcontext');
 }
 
-// If it's no WB reports admin, we have to check for the view capability.
-if (!has_capability('local/wb_reports:admin', $context)) {
-    require_capability('local/wb_reports:view', $context);
-}
+require_capability('local/wb_reports:admin', $context);
 
 $PAGE->set_context($context);
-$title = get_string('pluginname', 'wbreport_testreport');
+$title = get_string('pluginname', 'wbreport_egbooking');
 $pagetitle = $title;
-$url = new moodle_url("/local/wb_reports/wbreport/testreport/report.php");
+$url = new moodle_url("/local/wb_reports/wbreport/egbooking/report.php");
 
 $PAGE->set_url($url);
 $PAGE->set_title($title);
-$PAGE->set_heading(get_string('pluginname', 'wbreport_testreport'));
+$PAGE->set_heading(get_string('pluginname', 'wbreport_egbooking'));
 
 $output = $PAGE->get_renderer('local_wb_reports');
 
 echo $output->header();
 
-$data = new testreport();
+$data = new egbooking();
 echo $output->render_report($data);
 
 echo $output->footer();

@@ -15,15 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the version information for the 1plraschbirnbaum model catquiz plugin
+ * Web service for mod booking
  *
- * @package     wbreport_testreport
- * @copyright   2024 Wunderbyte GmbH <info@wunderbyte.at>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package wbreport_egbooking
+ * @copyright 2023 Georg Maißer
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024032100;
-$plugin->requires  = 2022041900;
-$plugin->component = 'wbreport_testreport';
+$functions = [];
+
+$services = [];
