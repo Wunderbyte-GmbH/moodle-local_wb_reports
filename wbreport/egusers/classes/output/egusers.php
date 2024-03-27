@@ -26,6 +26,8 @@
 namespace wbreport_egusers\output;
 
 use cache_helper;
+use context_course;
+use context_system;
 use local_wb_reports\plugininfo\wbreport;
 use local_wb_reports\plugininfo\wbreport_interface;
 use local_wunderbyte_table\filters\types\datepicker;
@@ -55,9 +57,10 @@ class egusers implements renderable, templatable, wbreport_interface {
      * In the constructor, we gather all the data we need.
      */
     public function __construct() {
-        global $DB;
+        global $DB, $USER;
 
         cache_helper::purge_by_event('setbackwbreportscache');
+        $syscontext = context_system::instance();
 
         // Create instance of transactions wb_table and specify columns and headers.
         $table = new egusers_table('egusers_table');
@@ -158,9 +161,31 @@ class egusers implements renderable, templatable, wbreport_interface {
                 ON s6.userid = u.id
             ) m";
 
-        $where = '1 = 1';
+        // Determine the $where part.
+        $where = "1=0"; // By default, we show nothing.
+        if (has_capability('local/wb_reports:admin', $syscontext)) {
+            // Admins of Wunderbyte reports will always see all courses.
+            $where = "1=1";
+        } else if (has_capability('local/wb_reports:view', $syscontext)) {
+            // Else we need to check if the logged-in user has the right to view reports...
+            // ...and the right to view each course.
+            $csql = "SELECT id FROM {course}";
+            $courses = $DB->get_fieldset_sql($csql);
+            $courseids = [];
+            foreach ($courses as $courseid) {
+                $coursecontext = context_course::instance($courseid);
+                if (!is_enrolled($coursecontext, $USER)) {
+                    continue;
+                }
+                $courseids[] = $courseid;
+            }
+            if (!empty($courseids)) {
+                list($incourses, $params) = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+                $where = "m.courseid $incourses";
+            }
+        }
 
-        $table->set_filter_sql($fields, $from, $where, '');
+        $table->set_filter_sql($fields, $from, $where, '', $params ?? []);
 
         $table->sortable(true, 'fullname', SORT_ASC);
 

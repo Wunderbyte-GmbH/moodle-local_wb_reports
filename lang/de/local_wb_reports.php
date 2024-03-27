@@ -28,7 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'Wunderbyte Reports';
 
 // Access.
-$string['wb_reports:canmanage'] = "Darf Wunderbyte Reports bearbeiten";
+$string['wb_reports:admin'] = "Kann alle Wunderbyte Reports sehen und bearbeiten";
+$string['wb_reports:view'] = "Kann Wunderbyte Reports sehen (falls erlaubt)";
 
 // Cache.
 $string['cachedef_wbreportscache'] = 'Wunderbyte Reports Cache';

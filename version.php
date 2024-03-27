@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_wb_reports';
 $plugin->release = '0.0.1';
-$plugin->version = 2024032101;
+$plugin->version = 2024032700;
 $plugin->requires = 2022041900;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->dependencies = [

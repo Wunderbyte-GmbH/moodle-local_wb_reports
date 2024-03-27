@@ -27,15 +27,15 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
 
-        'local/wb_reports:view' => [
-            'captype' => 'read',
+        'local/wb_reports:admin' => [
+            'captype' => 'write',
             'contextlevel' => CONTEXT_SYSTEM,
             'archetypes' => [
                 'manager' => CAP_ALLOW,
             ]
         ],
-        'local/wb_reports:canmanage' => [
-            'captype' => 'write',
+        'local/wb_reports:view' => [
+            'captype' => 'read',
             'contextlevel' => CONTEXT_SYSTEM,
             'archetypes' => [
                 'manager' => CAP_ALLOW,

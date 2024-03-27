@@ -30,8 +30,13 @@
 function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
     global $CFG;
 
+    $context = context_system::instance();
+
     // Early bail out conditions.
-    if (!isloggedin() || isguestuser() || !has_capability('local/wb_reports:view', context_system::instance())) {
+    if (!isloggedin() ||
+        isguestuser() ||
+        (!has_capability('local/wb_reports:view', $context) &&
+        !has_capability('local/wb_reports:admin', $context))) {
         return;
     }
 
@@ -49,7 +54,7 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
         '</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' .
         '<h6 class="dropdown-header">' . get_string('pluginname', 'local_wb_reports') . '</h6>' .
         '<a class="dropdown-item" href="' . $CFG->wwwroot . '/local/wb_reports/dashboard.php">' .
-            get_string('dashboard', 'local_wb_reports') . '</a>' .
+            get_string('dashboard', 'local_wb_reports') . '</a><div class="dropdown-divider"></div>' .
         $dropdownitems . '</div></div>';
 
     return $output;

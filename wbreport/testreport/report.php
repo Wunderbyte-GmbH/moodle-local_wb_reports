@@ -32,7 +32,11 @@ global $DB, $PAGE, $OUTPUT, $USER;
 if (!$context = context_system::instance()) {
     throw new moodle_exception('badcontext');
 }
-require_capability('local/wb_reports:view', $context);
+
+// If it's no WB reports admin, we have to check for the view capability.
+if (!has_capability('local/wb_reports:admin', $context)) {
+    require_capability('local/wb_reports:view', $context);
+}
 
 $PAGE->set_context($context);
 $title = get_string('pluginname', 'wbreport_testreport');
