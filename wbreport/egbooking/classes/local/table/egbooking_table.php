@@ -52,7 +52,7 @@ class egbooking_table extends wunderbyte_table {
         return $ret;
     }
 
-    /*
+    /**
      * This function is called for each data row to allow processing of the
      * "bookedoptions" value.
      *
@@ -60,17 +60,16 @@ class egbooking_table extends wunderbyte_table {
      * @return string a string showing the completion count
      * @throws coding_exception
      */
-    // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-    /* public function col_bookedoptions($values) {
+    public function col_bookedoptions($values) {
         $bookedoptions = $values->bookedoptions;
         if ($this->is_downloading()) {
             return $bookedoptions;
         }
         $ret = str_replace(';', '<br>', $bookedoptions);
         return $ret;
-    } */
+    }
 
-    /*
+    /**
      * This function is called for each data row to allow processing of the
      * "canceledoptions" value.
      *
@@ -78,13 +77,12 @@ class egbooking_table extends wunderbyte_table {
      * @return string a string showing the completion count
      * @throws coding_exception
      */
-    // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-    /* public function col_canceledoptions($values) {
+    public function col_canceledoptions($values) {
         $canceledoptions = $values->canceledoptions;
         if ($this->is_downloading()) {
             return $canceledoptions;
         }
         $ret = str_replace(';', '<br>', $canceledoptions);
         return $ret;
-    } */
+    }
 }

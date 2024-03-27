@@ -171,7 +171,7 @@ class wbreport extends base {
 
             return "STRING_AGG(DISTINCT {$field}, '" . $separator . "' {$fieldsort})";
         } else {
-            return $DB->sql_group_concat("DISTINCT {$field}", $fieldsort);
+            return $DB->sql_group_concat("DISTINCT {$field}", $separator, $fieldsort);
         }
     }
 
