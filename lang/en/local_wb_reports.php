@@ -42,4 +42,5 @@ $string['coursestart'] = 'Course start';
 $string['courseend'] = 'Course end';
 $string['dashboard'] = 'Dashboard (Show all reports)';
 $string['openreport'] = 'Open report';
+$string['lastaccess'] = 'Last access';
 $string['userid'] = 'User ID';

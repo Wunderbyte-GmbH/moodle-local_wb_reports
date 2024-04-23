@@ -32,26 +32,26 @@ class egusers_table extends wunderbyte_table {
 
     /**
      * This function is called for each data row to allow processing of the
-     * "startdate" value.
+     * "timeaccess" (=last access) value.
      *
      * @param object $values Contains object with all the values of record.
      * @return string a string containing the start date
      * @throws coding_exception
      */
-    public function col_startdate($values) {
-        $startdate = $values->startdate;
-        if (empty($startdate)) {
+    public function col_timeaccess($values) {
+        $lastaccess = $values->timeaccess;
+        if (empty($lastaccess)) {
             return '';
         }
         switch (current_language()) {
             case 'de':
-                $renderedstartdate = date('d.m.Y', $startdate);
+                $renderedlastaccess = date('d.m.Y', $lastaccess);
                 break;
             default:
-                $renderedstartdate = date('M d, Y', $startdate);
+                $renderedlastaccess = date('M d, Y', $lastaccess);
                 break;
         }
-        return $renderedstartdate;
+        return $renderedlastaccess;
     }
 
     /**

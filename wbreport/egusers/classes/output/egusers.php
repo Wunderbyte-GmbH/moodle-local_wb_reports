@@ -68,7 +68,7 @@ class egusers implements renderable, templatable, wbreport_interface {
         // Headers.
         $table->define_headers([
             get_string('coursename', 'local_wb_reports'),
-            get_string('coursestart', 'local_wb_reports'),
+            get_string('lastaccess', 'local_wb_reports'),
             get_string('firstname', 'core'),
             get_string('lastname', 'core'),
             get_string('pbl', 'wbreport_egusers'),
@@ -81,7 +81,7 @@ class egusers implements renderable, templatable, wbreport_interface {
         // Columns.
         $table->define_columns([
             'fullname',
-            'startdate',
+            'timeaccess',
             'firstname',
             'lastname',
             'pbl',
@@ -96,7 +96,7 @@ class egusers implements renderable, templatable, wbreport_interface {
 
         $from = "(SELECT " . $DB->sql_concat("c.id", "'-'", "u.id") .
                 " AS uniqueid,
-                c.id courseid, c.fullname, c.startdate,
+                c.id courseid, c.fullname, l.timeaccess,
                 u.id userid, u.firstname, u.lastname,
                 s1.pbl, s4.pp, s5.tenant,
                 CASE
@@ -108,6 +108,8 @@ class egusers implements renderable, templatable, wbreport_interface {
                 JOIN {enrol} e ON c.id = e.courseid
                 JOIN {user_enrolments} ue ON e.id = ue.enrolid
                 JOIN {user} u ON u.id = ue.userid
+                LEFT JOIN {user_lastaccess} l
+                ON l.userid = u.id AND l.courseid = c.id
                 LEFT JOIN (
                     SELECT userid, data AS pbl
                     FROM {user_info_data} uid
@@ -224,8 +226,8 @@ class egusers implements renderable, templatable, wbreport_interface {
         $table->add_filter($standardfilter);
 
         $datepicker = new datepicker(
-            'startdate',
-            get_string('coursestart', 'local_wb_reports'),
+            'timeaccess',
+            get_string('lastaccess', 'local_wb_reports'),
         );
         $datepicker->add_options(
             'in between',
