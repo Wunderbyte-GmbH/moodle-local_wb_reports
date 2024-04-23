@@ -28,6 +28,7 @@ namespace wbreport_egusers\output;
 use cache_helper;
 use context_course;
 use context_system;
+use core_course_category;
 use local_wb_reports\plugininfo\wbreport;
 use local_wb_reports\plugininfo\wbreport_interface;
 use local_wunderbyte_table\filters\types\datepicker;
@@ -61,6 +62,31 @@ class egusers implements renderable, templatable, wbreport_interface {
 
         cache_helper::purge_by_event('setbackwbreportscache');
         $syscontext = context_system::instance();
+
+        // Initialize params.
+        $inparams1 = [];
+        $inparams2 = [];
+        $courseids = [];
+
+        // Get a list of all EG e-training courses.
+        $topcategory = core_course_category::get(1); // ID: 1 is category "EG Group - eTraining".
+
+        // Get all courses within top category.
+        $courses = $topcategory->get_courses();
+        foreach ($courses as $course) {
+            $courseids[] = $course->id;
+        }
+        // Now get all courses within sub-categories too.
+        $categoryids = $topcategory->get_all_children_ids();
+        foreach ($categoryids as $categoryid) {
+            $coursecat = core_course_category::get($categoryid);
+            $courses = $coursecat->get_courses();
+            foreach ($courses as $course) {
+                $courseids[] = $course->id;
+            }
+        }
+
+        [$insql, $inparams1] = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED, 'cid');
 
         // Create instance of transactions wb_table and specify columns and headers.
         $table = new egusers_table('egusers_table');
@@ -161,31 +187,43 @@ class egusers implements renderable, templatable, wbreport_interface {
                     LIMIT 1)
                 ) s6
                 ON s6.userid = u.id
+                WHERE c.id $insql
             ) m";
 
         // Determine the $where part.
         $where = "1=0"; // By default, we show nothing.
         if (has_capability('local/wb_reports:admin', $syscontext)) {
-            // Admins of Wunderbyte reports will always see all courses.
+            // Admins of Wunderbyte reports will always be allowed to see everything.
             $where = "1=1";
         } else if (has_capability('local/wb_reports:view', $syscontext)) {
-            // Else we need to check if the logged-in user has the right to view reports...
-            // ...and the right to view each course.
-            $csql = "SELECT id FROM {course}";
-            $courses = $DB->get_fieldset_sql($csql);
-            $courseids = [];
-            foreach ($courses as $courseid) {
-                $coursecontext = context_course::instance($courseid);
-                if (!is_enrolled($coursecontext, $USER)) {
-                    continue;
+            // Else we need to check if the logged-in user has the right to view the users.
+            // There is a custom user profile field called 'allowedpbls' storing the PBLs...
+            // ...for users which the user is allowed to see.
+            $user = $USER;
+            profile_load_custom_fields($user);
+            if (!empty($user->profile['allowedpbls'])) {
+                $allowedpbls = $user->profile['allowedpbls'];
+                $allowedpbls = str_replace(' ', '', $allowedpbls);
+                $pbls = explode(',', $allowedpbls);
+                // By default, a user can see all users having the same PBL as himself, so add it if it exists.
+                if (!empty($user->profile['partnerid'])) { // Shortname for PBL is partnerid.
+                    $pbls[] = $user->profile['partnerid'];
                 }
-                $courseids[] = $courseid;
-            }
-            if (!empty($courseids)) {
-                list($incourses, $params) = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
-                $where = "m.courseid $incourses";
+                if (!empty($pbls)) {
+                    [$inpbls, $inparams2] = $DB->get_in_or_equal($pbls, SQL_PARAMS_NAMED, 'pbl');
+                    $where = "m.pbl $inpbls";
+                }
+            } else {
+                // No allowedpbls, so use only the PBL of the user himself.
+                if (!empty($user->profile['partnerid'])) { // Shortname for PBL is partnerid.
+                    $pbl = $user->profile['partnerid'];
+                    $where = "m.pbl = '{$pbl}'";
+                }
             }
         }
+
+        // Merge params.
+        $params = array_merge($inparams1, $inparams2);
 
         $table->set_filter_sql($fields, $from, $where, '', $params ?? []);
 
