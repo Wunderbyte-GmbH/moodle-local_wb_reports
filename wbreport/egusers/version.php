@@ -24,6 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024032100;
+$plugin->version   = 2024042300;
 $plugin->requires  = 2022041900;
 $plugin->component = 'wbreport_egusers';
