@@ -91,32 +91,6 @@ class egusers implements renderable, templatable, wbreport_interface {
         // Create instance of transactions wb_table and specify columns and headers.
         $table = new egusers_table('egusers_table');
 
-        // Headers.
-        $table->define_headers([
-            get_string('coursename', 'local_wb_reports'),
-            get_string('lastaccess', 'local_wb_reports'),
-            get_string('firstname', 'core'),
-            get_string('lastname', 'core'),
-            get_string('pbl', 'wbreport_egusers'),
-            get_string('tenant', 'wbreport_egusers'),
-            get_string('pp', 'wbreport_egusers'),
-            get_string('ispartner', 'wbreport_egusers'),
-            get_string('complcount', 'wbreport_egusers'),
-        ]);
-
-        // Columns.
-        $table->define_columns([
-            'fullname',
-            'timeaccess',
-            'firstname',
-            'lastname',
-            'pbl',
-            'tenant',
-            'pp',
-            'ispartner',
-            'complcount',
-        ]);
-
         // Define SQL here.
         $fields = "m.*";
 
@@ -165,7 +139,8 @@ class egusers implements renderable, templatable, wbreport_interface {
                     FROM {user_info_data} uid
                     WHERE fieldid = (SELECT id
                     FROM {user_info_field} uif
-                    WHERE shortname LIKE '%artner%ogram%' -- Partnerprogramm, use pattern to be safe.
+                    -- Partnerprogramm, use pattern to be safe.
+                    WHERE shortname LIKE '%artner%ogram%'
                     LIMIT 1)
                 ) s4
                 ON s4.userid = u.id
@@ -193,14 +168,23 @@ class egusers implements renderable, templatable, wbreport_interface {
         // Determine the $where part.
         $where = "1=0"; // By default, we show nothing.
         if (has_capability('local/wb_reports:admin', $syscontext)) {
+
             // Admins of Wunderbyte reports will always be allowed to see everything.
             $where = "1=1";
+
+            // For report admins, we always show PBLs.
+            $showpbls = true;
+
         } else if (has_capability('local/wb_reports:view', $syscontext)) {
+            $where = "1=1";
+            $showpbls = false; // By default, we do not show PBLs for non-admins.
+
             // Else we need to check if the logged-in user has the right to view the users.
             // There is a custom user profile field called 'allowedpbls' storing the PBLs...
             // ...for users which the user is allowed to see.
             $user = $USER;
             profile_load_custom_fields($user);
+
             if (!empty($user->profile['allowedpbls'])) {
                 $allowedpbls = $user->profile['allowedpbls'];
                 $allowedpbls = str_replace(' ', '', $allowedpbls);
@@ -211,16 +195,63 @@ class egusers implements renderable, templatable, wbreport_interface {
                 }
                 if (!empty($pbls)) {
                     [$inpbls, $inparams2] = $DB->get_in_or_equal($pbls, SQL_PARAMS_NAMED, 'pbl');
-                    $where = "m.pbl $inpbls";
+                    $where .= " AND m.pbl $inpbls";
+
+                    // If it's no admin, we only show the PBLs if there is more than one.
+                    // So we need a flag for this.
+                    if (count($pbls) > 1) {
+                        $showpbls = true;
+                    }
                 }
             } else {
                 // No allowedpbls, so use only the PBL of the user himself.
                 if (!empty($user->profile['partnerid'])) { // Shortname for PBL is partnerid.
                     $pbl = $user->profile['partnerid'];
-                    $where = "m.pbl = '{$pbl}'";
+                    $where .= " AND m.pbl = '{$pbl}'";
                 }
             }
+
+            // A user needs to be part of a tenant, e.g. "Esso".
+            if (empty($tenant = $user->profile['tenant'])) {
+                $where = "1=0"; // A user without a tenant cannot see anything in this report.
+            } else {
+                $where .= " AND m.tenant = '{$tenant}'";
+            }
         }
+
+        // Headers.
+        $headers = [];
+        $headers[] = get_string('coursename', 'local_wb_reports');
+        $headers[] = get_string('lastaccess', 'local_wb_reports');
+        $headers[] = get_string('firstname', 'core');
+        $headers[] = get_string('lastname', 'core');
+        if ($showpbls) {
+            $headers[] = get_string('pbl', 'wbreport_egusers');
+        }
+        if (has_capability('local/wb_reports:admin', $syscontext)) {
+            $headers[] = get_string('tenant', 'wbreport_egusers');
+            $headers[] = get_string('pp', 'wbreport_egusers');
+            $headers[] = get_string('ispartner', 'wbreport_egusers');
+        }
+        $headers[] = get_string('complcount', 'wbreport_egusers');
+        $table->define_headers($headers);
+
+        // Columns.
+        $columns = [];
+        $columns[] = 'fullname';
+        $columns[] = 'timeaccess';
+        $columns[] = 'firstname';
+        $columns[] = 'lastname';
+        if ($showpbls) {
+            $columns[] = 'pbl';
+        }
+        if (has_capability('local/wb_reports:admin', $syscontext)) {
+            $columns[] = 'tenant';
+            $columns[] = 'pp';
+            $columns[] = 'ispartner';
+        }
+        $columns[] = 'complcount';
+        $table->define_columns($columns);
 
         // Merge params.
         $params = array_merge($inparams1, $inparams2);
@@ -233,21 +264,25 @@ class egusers implements renderable, templatable, wbreport_interface {
         $standardfilter = new standardfilter('fullname', get_string('coursename', 'local_wb_reports'));
         $table->add_filter($standardfilter);
 
-        $standardfilter = new standardfilter('pbl', get_string('pbl', 'wbreport_egusers'));
-        $table->add_filter($standardfilter);
+        if ($showpbls) {
+            $standardfilter = new standardfilter('pbl', get_string('pbl', 'wbreport_egusers'));
+            $table->add_filter($standardfilter);
+        }
 
-        $standardfilter = new standardfilter('tenant', get_string('tenant', 'wbreport_egusers'));
-        $table->add_filter($standardfilter);
+        if (has_capability('local/wb_reports:admin', $syscontext)) {
+            $standardfilter = new standardfilter('tenant', get_string('tenant', 'wbreport_egusers'));
+            $table->add_filter($standardfilter);
 
-        $standardfilter = new standardfilter('pp', get_string('pp', 'wbreport_egusers'));
-        $table->add_filter($standardfilter);
+            $standardfilter = new standardfilter('pp', get_string('pp', 'wbreport_egusers'));
+            $table->add_filter($standardfilter);
 
-        $standardfilter = new standardfilter('ispartner', get_string('ispartner', 'wbreport_egusers'));
-        $standardfilter->add_options([
-            '1' => '✅',
-            '0' => '❌',
-        ]);
-        $table->add_filter($standardfilter);
+            $standardfilter = new standardfilter('ispartner', get_string('ispartner', 'wbreport_egusers'));
+            $standardfilter->add_options([
+                '1' => '✅',
+                '0' => '❌',
+            ]);
+            $table->add_filter($standardfilter);
+        }
 
         $standardfilter = new standardfilter('complcount', get_string('complcount', 'wbreport_egusers'));
         $standardfilter->add_options([
@@ -277,10 +312,35 @@ class egusers implements renderable, templatable, wbreport_interface {
         $table->add_filter($datepicker);
 
         // Full text search columns.
-        $table->define_fulltextsearchcolumns(['fullname', 'firstname', 'lastname', 'pbl', 'tenant', 'pp', 'ispartner']);
+        $fulltextsearchcols = [];
+        $fulltextsearchcols[] = 'fullname';
+        $fulltextsearchcols[] = 'firstname';
+        $fulltextsearchcols[] = 'lastname';
+        if ($showpbls) {
+            $fulltextsearchcols[] = 'pbl';
+        }
+        if (has_capability('local/wb_reports:admin', $syscontext)) {
+            $fulltextsearchcols[] = 'tenant';
+            $fulltextsearchcols[] = 'pp';
+            $fulltextsearchcols[] = 'ispartner';
+        }
+        $table->define_fulltextsearchcolumns($fulltextsearchcols);
 
         // Sortable columns.
-        $table->define_sortablecolumns(['fullname', 'firstname', 'lastname', 'pbl', 'tenant', 'pp', 'ispartner', 'complcount']);
+        $sortablecols = [];
+        $sortablecols[] = 'fullname';
+        $sortablecols[] = 'firstname';
+        $sortablecols[] = 'lastname';
+        if ($showpbls) {
+            $sortablecols[] = 'pbl';
+        }
+        if (has_capability('local/wb_reports:admin', $syscontext)) {
+            $sortablecols[] = 'tenant';
+            $sortablecols[] = 'pp';
+            $sortablecols[] = 'ispartner';
+        }
+        $sortablecols[] = 'complcount';
+        $table->define_sortablecolumns($sortablecols);
 
         $table->define_cache('local_wb_reports', 'wbreportscache');
 
