@@ -36,7 +36,6 @@ class egusers_table extends wunderbyte_table {
      *
      * @param object $values Contains object with all the values of record.
      * @return string a string containing the start date
-     * @throws coding_exception
      */
     public function col_timeaccess($values) {
         $lastaccess = $values->timeaccess;
@@ -60,7 +59,6 @@ class egusers_table extends wunderbyte_table {
      *
      * @param object $values Contains object with all the values of record.
      * @return string a string showing the completion count
-     * @throws coding_exception
      */
     public function col_complcount($values) {
         $complcount = $values->complcount ?? 0; // Number of completed modules.
@@ -88,7 +86,6 @@ class egusers_table extends wunderbyte_table {
      *
      * @param object $values Contains object with all the values of record.
      * @return string a string showing the completion count
-     * @throws coding_exception
      */
     public function col_ispartner($values) {
         $ispartner = $values->ispartner;

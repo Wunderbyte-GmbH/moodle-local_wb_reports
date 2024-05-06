@@ -49,6 +49,9 @@ $PAGE->set_title(format_string($title));
 $PAGE->set_heading($title);
 
 $PAGE->set_pagelayout('standard');
+if (is_siteadmin()) {
+    $PAGE->add_body_class('wb_isadmin');
+}
 $PAGE->add_body_class('local_wb_reports-dashboard');
 
 echo $OUTPUT->header();
