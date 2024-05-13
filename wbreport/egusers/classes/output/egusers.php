@@ -113,7 +113,7 @@ class egusers implements renderable, templatable, wbreport_interface {
                 LEFT JOIN (
                     SELECT uid.userid, uid.data AS pbl
                     FROM {user_info_data} uid
-                    WHERE uif.fieldid = (SELECT uif.id
+                    WHERE uid.fieldid = (SELECT uif.id
                     FROM {user_info_field} uif
                     WHERE uif.name LIKE '%PBL%'
                     LIMIT 1)
