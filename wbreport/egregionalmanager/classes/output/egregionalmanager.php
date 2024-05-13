@@ -95,11 +95,11 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
                 LEFT JOIN {user_lastaccess} l
                 ON l.userid = u.id AND l.courseid = c.id
                 LEFT JOIN (
-                    SELECT userid, data AS pbl
-                    FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
-                    FROM {user_info_field} uif
-                    WHERE name LIKE '%PBL%'
+                    SELECT uid1.userid, uid1.data AS pbl
+                    FROM {user_info_data} uid1
+                    WHERE uid1.fieldid = (SELECT uif1.id
+                    FROM {user_info_field} uif1
+                    WHERE uif1.name LIKE '%PBL%'
                     LIMIT 1)
                 ) s1
                 ON s1.userid = u.id
@@ -112,37 +112,37 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
                 ) s2
                 ON s2.userid = u.id AND s2.course = c.id
                 LEFT JOIN (
-                    SELECT course, count(*) modcount
-                    FROM {course_modules}
-                    WHERE visible = 1 AND completion > 0
-                    GROUP BY course
+                    SELECT cm1.course, cm1.count(*) modcount
+                    FROM {course_modules} cm1
+                    WHERE cm1.visible = 1 AND cm1.completion > 0
+                    GROUP BY cm1.course
                 ) s3
                 ON s3.course = c.id
                 LEFT JOIN (
-                    SELECT userid, data AS pp
-                    FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
-                    FROM {user_info_field} uif
+                    SELECT uid2.userid, uid2.data AS pp
+                    FROM {user_info_data} uid2
+                    WHERE uid2.fieldid = (SELECT uif2.id
+                    FROM {user_info_field} uif2
                     -- Partnerprogramm, use pattern to be safe.
-                    WHERE shortname LIKE '%artner%ogram%'
+                    WHERE uif2.shortname LIKE '%artner%ogram%'
                     LIMIT 1)
                 ) s4
                 ON s4.userid = u.id
                 LEFT JOIN (
-                    SELECT userid, data AS tenant
-                    FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
-                    FROM {user_info_field} uif
-                    WHERE shortname = 'tenant'
+                    SELECT uid3.userid, uid3.data AS tenant
+                    FROM {user_info_data} uid3
+                    WHERE uid3.fieldid = (SELECT uif3.id
+                    FROM {user_info_field} uif3
+                    WHERE uif3.shortname = 'tenant'
                     LIMIT 1)
                 ) s5
                 ON s5.userid = u.id
                 LEFT JOIN (
-                    SELECT userid, data AS ispartner
-                    FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
-                    FROM {user_info_field} uif
-                    WHERE shortname = 'ispartner'
+                    SELECT uid4.userid, uid4.data AS ispartner
+                    FROM {user_info_data} uid4
+                    WHERE uid4.fieldid = (SELECT uif4.id
+                    FROM {user_info_field} uif4
+                    WHERE uif4.shortname = 'ispartner'
                     LIMIT 1)
                 ) s6
                 ON s6.userid = u.id
@@ -253,7 +253,7 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
         $table->define_columns($columns);
 
         // Merge params.
-        $params = array_merge($inparams1, $inparams2);
+        $params = array_merge($inparams1, $inparams2, $inuseridparams);
 
         $table->set_filter_sql($fields, $from, $where, '', $params ?? []);
 

@@ -111,11 +111,11 @@ class egusers implements renderable, templatable, wbreport_interface {
                 LEFT JOIN {user_lastaccess} l
                 ON l.userid = u.id AND l.courseid = c.id
                 LEFT JOIN (
-                    SELECT userid, data AS pbl
+                    SELECT uid.userid, data AS pbl
                     FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
+                    WHERE fieldid = (SELECT uif.id
                     FROM {user_info_field} uif
-                    WHERE name LIKE '%PBL%'
+                    WHERE uif.name LIKE '%PBL%'
                     LIMIT 1)
                 ) s1
                 ON s1.userid = u.id
@@ -135,30 +135,30 @@ class egusers implements renderable, templatable, wbreport_interface {
                 ) s3
                 ON s3.course = c.id
                 LEFT JOIN (
-                    SELECT userid, data AS pp
-                    FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
-                    FROM {user_info_field} uif
+                    SELECT uid2.userid, uid2.data AS pp
+                    FROM {user_info_data} uid2
+                    WHERE uid2.fieldid = (SELECT uif2.id
+                    FROM {user_info_field} uif2
                     -- Partnerprogramm, use pattern to be safe.
-                    WHERE shortname LIKE '%artner%ogram%'
+                    WHERE uif2.shortname LIKE '%artner%ogram%'
                     LIMIT 1)
                 ) s4
                 ON s4.userid = u.id
                 LEFT JOIN (
-                    SELECT userid, data AS tenant
-                    FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
-                    FROM {user_info_field} uif
-                    WHERE shortname = 'tenant'
+                    SELECT uid3.userid, uid3.data AS tenant
+                    FROM {user_info_data} uid3
+                    WHERE uid3.fieldid = (SELECT uif3.id
+                    FROM {user_info_field} uif3
+                    WHERE uif3.shortname = 'tenant'
                     LIMIT 1)
                 ) s5
                 ON s5.userid = u.id
                 LEFT JOIN (
-                    SELECT userid, data AS ispartner
-                    FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
-                    FROM {user_info_field} uif
-                    WHERE shortname = 'ispartner'
+                    SELECT uid4.userid, uid4.data AS ispartner
+                    FROM {user_info_data} uid4
+                    WHERE uid4.fieldid = (SELECT id
+                    FROM {user_info_field} uif4
+                    WHERE uif4.shortname = 'ispartner'
                     LIMIT 1)
                 ) s6
                 ON s6.userid = u.id
