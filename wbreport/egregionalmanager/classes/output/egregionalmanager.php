@@ -112,7 +112,7 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
                 ) s2
                 ON s2.userid = u.id AND s2.course = c.id
                 LEFT JOIN (
-                    SELECT cm1.course, cm1.count(*) modcount
+                    SELECT cm1.course, count(*) modcount
                     FROM {course_modules} cm1
                     WHERE cm1.visible = 1 AND cm1.completion > 0
                     GROUP BY cm1.course
