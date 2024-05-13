@@ -172,7 +172,7 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
             // Allowed user ids sql
             if (!empty($user->profile['alloweduserids'])) {
                 $alloweduserids = $user->profile['alloweduserids'];
-                $userids = explode('\r\n', $alloweduserids);
+                $userids = preg_split('/\s+/', $alloweduserids, -1, PREG_SPLIT_NO_EMPTY);
                 [$inuserids, $inuseridparams] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'userids');
                 if ($user->profile['tenant'] == "Esso" || $user->profile['tenant'] == "REG") {
                     $where .= " AND m.userid $inuserids";
@@ -186,7 +186,7 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
                         profile_load_custom_fields($tmpuser);
                         $allowedpbls = $tmpuser->profile['allowedpbls'];
                         $allowedpbls = str_replace(' ', '', $allowedpbls);
-                        $pbls = explode('\r\n', $allowedpbls);
+                        $pbls = preg_split('/\s+/', $alloweduserids, -1, PREG_SPLIT_NO_EMPTY);
                         $allpbls = array_merge($allpbls, $pbls);
                     }
                     if (!empty($user->profile['partnerid'])) { // Shortname for PBL is partnerid.

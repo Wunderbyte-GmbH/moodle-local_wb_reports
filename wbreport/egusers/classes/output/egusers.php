@@ -188,7 +188,7 @@ class egusers implements renderable, templatable, wbreport_interface {
             if (!empty($user->profile['allowedpbls'])) {
                 $allowedpbls = $user->profile['allowedpbls'];
                 $allowedpbls = str_replace(' ', '', $allowedpbls);
-                $pbls = explode('\r\n', $allowedpbls);
+                $pbls = preg_split('/\s+/', $allowedpbls, -1, PREG_SPLIT_NO_EMPTY);
                 // By default, a user can see all users having the same PBL as himself, so add it if it exists.
                 if (!empty($user->profile['partnerid'])) { // Shortname for PBL is partnerid.
                     $pbls[] = $user->profile['partnerid'];
