@@ -111,9 +111,9 @@ class egusers implements renderable, templatable, wbreport_interface {
                 LEFT JOIN {user_lastaccess} l
                 ON l.userid = u.id AND l.courseid = c.id
                 LEFT JOIN (
-                    SELECT uid.userid, data AS pbl
+                    SELECT uid.userid, uid.data AS pbl
                     FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT uif.id
+                    WHERE uif.fieldid = (SELECT uif.id
                     FROM {user_info_field} uif
                     WHERE uif.name LIKE '%PBL%'
                     LIMIT 1)
@@ -156,7 +156,7 @@ class egusers implements renderable, templatable, wbreport_interface {
                 LEFT JOIN (
                     SELECT uid4.userid, uid4.data AS ispartner
                     FROM {user_info_data} uid4
-                    WHERE uid4.fieldid = (SELECT id
+                    WHERE uid4.fieldid = (SELECT uif4.id
                     FROM {user_info_field} uif4
                     WHERE uif4.shortname = 'ispartner'
                     LIMIT 1)
