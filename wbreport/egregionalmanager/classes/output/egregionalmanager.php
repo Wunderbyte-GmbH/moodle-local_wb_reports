@@ -65,8 +65,7 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
         $syscontext = context_system::instance();
 
         // Initialize params.
-        $inparams1 = [];
-        $inparams2 = [];
+        $inpblsparams = [];
 
         $courses = get_courses('all', 'c.sortorder ASC', 'c.id');
 
@@ -195,16 +194,9 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
                     // All allowed pbls for all users the regional manager can see.
                     $allpbls = array_unique($allpbls);
                     if (!empty($allpbls)) {
-                        [$inpbls, $inparams2] = $DB->get_in_or_equal($allpbls, SQL_PARAMS_NAMED, 'pbl');
+                        [$inpbls, $inpblsparams] = $DB->get_in_or_equal($allpbls, SQL_PARAMS_NAMED, 'pbl');
                         $where .= " AND m.pbl $inpbls";
                     }
-                }
-            } else {
-                // User is not an regional manager.
-                // No allowedpbls, so use only the PBL of the user himself.
-                if (!empty($user->profile['partnerid'])) { // Shortname for PBL is partnerid.
-                    $pbl = $user->profile['partnerid'];
-                    $where .= " AND m.pbl = '{$pbl}'";
                 }
             }
 
@@ -253,7 +245,7 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
         $table->define_columns($columns);
 
         // Merge params.
-        $params = array_merge($inparams1, $inparams2, $inuseridparams);
+        $params = array_merge($inparams1, $inpblsparams, $inuseridparams);
 
         $table->set_filter_sql($fields, $from, $where, '', $params ?? []);
 
