@@ -70,10 +70,11 @@ class egpbl implements renderable, templatable, wbreport_interface {
 
         $courses = get_courses('all', 'c.sortorder ASC', 'c.id');
 
+
         [$insql, $inparams1] = $DB->get_in_or_equal(array_keys($courses), SQL_PARAMS_NAMED, 'cid');
 
         // Create instance of transactions wb_table and specify columns and headers.
-        $table = new egpbl_table('egpbl_table');
+        $table = new egpbl_table('egpbl_table' . $USER->id);
 
         // Define SQL here.
         $fields = "m.*";
@@ -82,11 +83,8 @@ class egpbl implements renderable, templatable, wbreport_interface {
                 " AS uniqueid,
                 c.id courseid, c.fullname, l.timeaccess,
                 u.id userid, u.firstname, u.lastname,
-                s1.pbl, s4.pp, s5.tenant,
-                CASE
-                    WHEN s6.ispartner IS NULL THEN '0'
-                    ELSE s6.ispartner
-                END ispartner,
+                " . $DB->sql_concat("u.firstname", "' '" ,"u.lastname") .  " as name,
+                s1.pbl,
                 s2.complcount, s3.modcount
                 FROM {course} c
                 JOIN {enrol} e ON c.id = e.courseid
@@ -118,35 +116,7 @@ class egpbl implements renderable, templatable, wbreport_interface {
                     GROUP BY cm1.course
                 ) s3
                 ON s3.course = c.id
-                LEFT JOIN (
-                    SELECT uid2.userid, uid2.data AS pp
-                    FROM {user_info_data} uid2
-                    WHERE uid2.fieldid = (SELECT uif2.id
-                    FROM {user_info_field} uif2
-                    -- Partnerprogramm, use pattern to be safe.
-                    WHERE uif2.shortname LIKE '%artner%ogram%'
-                    LIMIT 1)
-                ) s4
-                ON s4.userid = u.id
-                LEFT JOIN (
-                    SELECT uid3.userid, uid3.data AS tenant
-                    FROM {user_info_data} uid3
-                    WHERE uid3.fieldid = (SELECT uif3.id
-                    FROM {user_info_field} uif3
-                    WHERE uif3.shortname = 'tenant'
-                    LIMIT 1)
-                ) s5
-                ON s5.userid = u.id
-                LEFT JOIN (
-                    SELECT uid4.userid, uid4.data AS ispartner
-                    FROM {user_info_data} uid4
-                    WHERE uid4.fieldid = (SELECT uif4.id
-                    FROM {user_info_field} uif4
-                    WHERE uif4.shortname = 'ispartner'
-                    LIMIT 1)
-                ) s6
-                ON s6.userid = u.id
-                WHERE c.id $insql
+                WHERE c.id $insql AND c.id != 26
             ) m";
 
         // Determine the $where part.
@@ -154,14 +124,15 @@ class egpbl implements renderable, templatable, wbreport_interface {
         $user = $USER;
         profile_load_custom_fields($user);
         if (!empty($user->profile['ispartner'])) {
-            $where = "m.pbl = ?";
-            $inpblsparams = $user->profile['partnerid'];
+            $where = "m.pbl = :pbl";
+            $inpblsparams = ['pbl' => $user->profile['partnerid']];
         }
-
+     
         // Headers.
         $headers = [];
         $headers[] = get_string('coursename', 'local_wb_reports');
         $headers[] = get_string('lastaccess', 'local_wb_reports');
+        $headers[] = get_string('name', 'core');
         $headers[] = get_string('firstname', 'core');
         $headers[] = get_string('lastname', 'core');
         $headers[] = get_string('pbl', 'wbreport_egpbl');
@@ -172,6 +143,7 @@ class egpbl implements renderable, templatable, wbreport_interface {
         $columns = [];
         $columns[] = 'fullname';
         $columns[] = 'timeaccess';
+        $columns[] = 'name';
         $columns[] = 'firstname';
         $columns[] = 'lastname';
         $columns[] = 'pbl';
@@ -187,6 +159,12 @@ class egpbl implements renderable, templatable, wbreport_interface {
 
         // Define Filters.
         $standardfilter = new standardfilter('fullname', get_string('coursename', 'local_wb_reports'));
+        $table->add_filter($standardfilter);
+
+        $standardfilter = new standardfilter('name', get_string('fullname', ''));
+        $table->add_filter($standardfilter);
+        
+        $standardfilter = new standardfilter('lastname', get_string('lastname', ''));
         $table->add_filter($standardfilter);
 
         $standardfilter = new standardfilter('complcount', get_string('complcount', 'wbreport_egpbl'));
@@ -216,13 +194,6 @@ class egpbl implements renderable, templatable, wbreport_interface {
         );
         $table->add_filter($datepicker);
 
-        // Full text search columns.
-        $fulltextsearchcols = [];
-        $fulltextsearchcols[] = 'fullname';
-        $fulltextsearchcols[] = 'firstname';
-        $fulltextsearchcols[] = 'lastname'; $fulltextsearchcols[] = 'ispartner';
-        $table->define_fulltextsearchcolumns($fulltextsearchcols);
-
         // Sortable columns.
         $sortablecols = [];
         $sortablecols[] = 'fullname';
@@ -246,11 +217,9 @@ class egpbl implements renderable, templatable, wbreport_interface {
         $table->showreloadbutton = true;
 
         // Apply filter on download.
-        $table->applyfilterondownload = true;
+        $table->applyfilterondownload = false;
 
-        // Pass html to render.
-        list($idstring, $encodedtable, $html) = $table->lazyouthtml(50, true);
-        $this->tabledata = $html;
+        $this->tabledata = $table->outhtml(50, false);
     }
 
     /**

@@ -34,9 +34,10 @@ if (!$context = context_system::instance()) {
 }
 
 $customfields = profile_user_record($USER->id);
-if (!isset($customfields->ispartner) && !$customfields->ispartner === 'true') {
+if (!isset($customfields->ispartner) && !$customfields->ispartner != true) {
     throw new moodle_exception('noaccess');
 }
+
 
 $PAGE->set_context($context);
 $title = get_string('pluginname', 'wbreport_egpbl');
@@ -45,7 +46,7 @@ $url = new moodle_url("/local/wb_reports/wbreport/egpbl/report.php");
 
 $PAGE->set_url($url);
 $PAGE->set_title($title);
-$PAGE->set_heading(get_string('pluginname', 'wbreport_egpbl'));
+$PAGE->set_heading(get_string('pluginname', 'wbreport_egpbl') . ' ' .  $customfields->partnerid);
 
 $output = $PAGE->get_renderer('local_wb_reports');
 
