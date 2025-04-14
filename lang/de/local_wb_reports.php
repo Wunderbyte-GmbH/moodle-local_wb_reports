@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Wunderbyte Reports';
+$string['subplugintype_wbreport_plural'] = 'Wunderbyte Reports';
 
 // Access.
 $string['wb_reports:admin'] = "Kann alle Wunderbyte Reports sehen und bearbeiten";
