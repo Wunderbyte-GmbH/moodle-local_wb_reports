@@ -40,7 +40,6 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface wbreport_interface {
-
     /**
      * Export this data so it can be used as the context for a mustache template.
      * @return stdClass
@@ -52,5 +51,4 @@ interface wbreport_interface {
      * @return string the html for the table header
      * */
     public function get_table_header_html(): string;
-
 }

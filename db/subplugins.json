@@ -1,4 +1,7 @@
 {
+    "subplugintypes": {
+        "wbreport": "wbreport"
+    },
     "plugintypes": {
         "wbreport": "local\/wb_reports\/wbreport"
     }
