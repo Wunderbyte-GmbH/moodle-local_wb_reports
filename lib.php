@@ -21,13 +21,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-require_once(__DIR__ . '/../../config.php');
-
-// No guest autologin.
-require_login(0, false);
-
 /**
  * Renders the popup.
  *
@@ -44,8 +37,9 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
     $customfields = profile_user_record($USER->id);
     if (isset($customfields->ispartner) && $customfields->ispartner == true) {
         $ispartner = true;
-        $dropdownitems .= '<a class="dropdown-item" href="' . $CFG->wwwroot . '/local/wb_reports/wbreport/egpbl/report.php">' . get_string('pluginname', 'wbreport_egpbl') .
-        '</a>';
+        $dropdownitems .= '<a class="dropdown-item" href="' . $CFG->wwwroot .
+            '/local/wb_reports/wbreport/egpbl/report.php">' . get_string('pluginname', 'wbreport_egpbl') .
+            '</a>';
         $output = '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-light dropdown-toggle" type="button"
         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -57,8 +51,9 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
 
     if (isset($customfields->departmenthead) && $customfields->departmenthead == true) {
         $ispartner = true;
-        $dropdownitems .= '<a class="dropdown-item" href="' . $CFG->wwwroot . '/local/wb_reports/wbreport/egdepartmenthead/report.php">' . get_string('pluginname', 'wbreport_egpbl') .
-        '</a>';
+        $dropdownitems .= '<a class="dropdown-item" href="' . $CFG->wwwroot .
+            '/local/wb_reports/wbreport/egdepartmenthead/report.php">' . get_string('pluginname', 'wbreport_egpbl') .
+            '</a>';
         $output = '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-light dropdown-toggle" type="button"
         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,10 +63,12 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
         $dropdownitems . '</div></div>';
     }
 
-    if (!isloggedin() ||
+    if (
+        !isloggedin() ||
         isguestuser() ||
         (!has_capability('local/wb_reports:view', $context) &&
-        !has_capability('local/wb_reports:admin', $context))) {
+        !has_capability('local/wb_reports:admin', $context))
+    ) {
         return $output;
     }
 
