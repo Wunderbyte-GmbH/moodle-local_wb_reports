@@ -17,10 +17,11 @@
 /**
  * This file contains language strings for the subplugin.
  *
- * @package     wbreport_egpbl
+ * @package     wbreport_egdepartmenthead
  * @copyright   2023 Georg Maißer <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 $string['pluginname'] = 'EG Group: Department Head Report';
 $string['reportidentifier'] = 'egdepartmenthead';
 $string['description'] = 'User overview for the regional manager role';

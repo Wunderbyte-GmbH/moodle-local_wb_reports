@@ -76,11 +76,18 @@ class egdepartmenthead implements renderable, templatable, wbreport_interface {
         $table = new egdepartmenthead_table('egdepartmenthead_table' . $USER->id . 'test');
 
         $usercohorts = cohort_get_user_cohorts($USER->id);
+
         $userids = [$USER->id];
         if (!empty($usercohorts)) {
-            $firstcohort = reset($usercohorts); // Takes the first cohort.
-            $cohortid = $firstcohort->id;
-            $userids = $DB->get_fieldset_select('cohort_members', 'userid', 'cohortid = ?', [$cohortid]);
+            $filtered = array_filter($usercohorts, function ($item) {
+                return strpos($item->idnumber, 'dph_') === 0;
+            });
+            if (!empty($filtered)) {
+
+                $firstcohort = reset($filtered); // Takes the first cohort.
+                $cohortid = $firstcohort->id;
+                $userids = $DB->get_fieldset_select('cohort_members', 'userid', 'cohortid = ?', [$cohortid]);
+            }    
         } 
 
         [$insql2, $inparams2] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'uid');
@@ -88,11 +95,12 @@ class egdepartmenthead implements renderable, templatable, wbreport_interface {
         // Define SQL here.
         $fields = "m.*";
 
-        $from = "(SELECT " . $DB->sql_concat("u.id", "'-'", "c.id") .
+        $from = "(SELECT " . $DB->sql_concat("u.id", "'-'", "e.id") .
                 " AS uniqueid,
                 c.id courseid, c.fullname, l.timeaccess,
                 u.id userid, u.firstname, u.lastname,
                 " . $DB->sql_concat("u.firstname", "' '" ,"u.lastname") .  " as name,
+                COALESCE(s1.data, '') AS pbl,
                 s2.complcount, s3.modcount
                 FROM {course} c
                 JOIN {enrol} e ON c.id = e.courseid
@@ -101,12 +109,14 @@ class egdepartmenthead implements renderable, templatable, wbreport_interface {
                 LEFT JOIN {user_lastaccess} l
                 ON l.userid = u.id AND l.courseid = c.id
                 LEFT JOIN (
-                    SELECT uid1.userid, uid1.data AS pbl
+                    SELECT uid1.userid, uid1.data
                     FROM {user_info_data} uid1
-                    WHERE uid1.fieldid = (SELECT uif1.id
-                    FROM {user_info_field} uif1
-                    WHERE uif1.name LIKE '%PBL%'
-                    LIMIT 1)
+                    WHERE uid1.fieldid = (
+                        SELECT uif1.id
+                        FROM {user_info_field} uif1
+                        WHERE uif1.name LIKE '%PBL%'
+                        LIMIT 1
+                    )
                 ) s1
                 ON s1.userid = u.id
                 LEFT JOIN (
