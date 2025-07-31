@@ -46,7 +46,7 @@ $url = new moodle_url("/local/wb_reports/wbreport/egdepartmenthead/report.php");
 
 $PAGE->set_url($url);
 $PAGE->set_title($title);
-$PAGE->set_heading(get_string('pluginname', 'wbreport_egpdepartmenthead'));
+$PAGE->set_heading(get_string('pluginname', 'wbreport_egdepartmenthead'));
 
 $output = $PAGE->get_renderer('local_wb_reports');
 

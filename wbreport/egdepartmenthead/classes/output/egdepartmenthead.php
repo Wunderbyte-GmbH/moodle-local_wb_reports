@@ -76,11 +76,18 @@ class egdepartmenthead implements renderable, templatable, wbreport_interface {
         $table = new egdepartmenthead_table('egdepartmenthead_table' . $USER->id . 'test');
 
         $usercohorts = cohort_get_user_cohorts($USER->id);
+
         $userids = [$USER->id];
         if (!empty($usercohorts)) {
-            $firstcohort = reset($usercohorts); // Takes the first cohort.
-            $cohortid = $firstcohort->id;
-            $userids = $DB->get_fieldset_select('cohort_members', 'userid', 'cohortid = ?', [$cohortid]);
+            $filtered = array_filter($usercohorts, function ($item) {
+                return strpos($item->idnumber, 'dph_') === 0;
+            });
+            if (!empty($filtered)) {
+
+                $firstcohort = reset($filtered); // Takes the first cohort.
+                $cohortid = $firstcohort->id;
+                $userids = $DB->get_fieldset_select('cohort_members', 'userid', 'cohortid = ?', [$cohortid]);
+            }    
         } 
 
         [$insql2, $inparams2] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'uid');
