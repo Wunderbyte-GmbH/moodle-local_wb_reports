@@ -15,33 +15,31 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
+ * Plugin administration pages are defined here.
  *
- * @package     local_wb_reports
- * @category    string
+ * @package     wbreport_egpbl
+ * @category    admin
  * @copyright   Wunderbyte GmbH 2024 <info@wunderbyte.at>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Wunderbyte Reports';
+$componentname = 'wbreport_egpbl';
 
-// Access.
-$string['wb_reports:admin'] = "Kann alle Wunderbyte Reports sehen und bearbeiten";
-$string['wb_reports:view'] = "Kann Wunderbyte Reports sehen (falls erlaubt)";
-
-// Cache.
-$string['cachedef_wbreportscache'] = 'Wunderbyte Reports Cache';
-
-// General strings.
-$string['backtowbreports'] = 'Zurück zu Wunderbyte Reports';
-$string['courseid'] = 'Kurs-ID';
-$string['coursename'] = 'Moodle-Kurs';
-$string['coursestart'] = 'Kursstart';
-$string['courseend'] = 'Kursende';
-$string['dashboard'] = 'Dashboard (alle Berichte anzeigen)';
-$string['openreport'] = 'Bericht öffnen';
-$string['lastaccess'] = 'Letzter Zugriff';
-$string['userid'] = 'Nutzer-ID';
-$string['subplugintype_wbreport_plural'] = 'Subplugins';
+// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+/*
+if ($hassiteconfig) {
+    if ($ADMIN->fulltree) {
+        // Here you can add report-specific settings.
+        $page->add(
+            new admin_setting_configtext(
+                $componentname . '/testsetting',
+                'hardcodedtestsetting',
+                'hardcodedtestsetting_description',
+                '',
+                PARAM_TEXT
+            )
+        );
+    }
+}
+*/

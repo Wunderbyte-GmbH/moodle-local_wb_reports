@@ -243,7 +243,7 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
         }
         $columns[] = 'complcount';
         $table->define_columns($columns);
-
+        $inuseridparams =  $inuseridparams ?? [];
         // Merge params.
         $params = array_merge($inparams1, $inpblsparams, $inuseridparams);
 
