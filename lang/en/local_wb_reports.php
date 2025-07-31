@@ -44,3 +44,4 @@ $string['dashboard'] = 'Dashboard (Show all reports)';
 $string['openreport'] = 'Open report';
 $string['lastaccess'] = 'Last access';
 $string['userid'] = 'User ID';
+$string['subplugintype_wbreport_plural'] = 'Subplugins';

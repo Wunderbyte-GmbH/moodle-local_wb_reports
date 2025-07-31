@@ -95,11 +95,12 @@ class egdepartmenthead implements renderable, templatable, wbreport_interface {
         // Define SQL here.
         $fields = "m.*";
 
-        $from = "(SELECT " . $DB->sql_concat("u.id", "'-'", "c.id") .
+        $from = "(SELECT " . $DB->sql_concat("u.id", "'-'", "e.id") .
                 " AS uniqueid,
                 c.id courseid, c.fullname, l.timeaccess,
                 u.id userid, u.firstname, u.lastname,
                 " . $DB->sql_concat("u.firstname", "' '" ,"u.lastname") .  " as name,
+                COALESCE(s1.data, '') AS pbl,
                 s2.complcount, s3.modcount
                 FROM {course} c
                 JOIN {enrol} e ON c.id = e.courseid
@@ -108,12 +109,14 @@ class egdepartmenthead implements renderable, templatable, wbreport_interface {
                 LEFT JOIN {user_lastaccess} l
                 ON l.userid = u.id AND l.courseid = c.id
                 LEFT JOIN (
-                    SELECT uid1.userid, uid1.data AS pbl
+                    SELECT uid1.userid, uid1.data
                     FROM {user_info_data} uid1
-                    WHERE uid1.fieldid = (SELECT uif1.id
-                    FROM {user_info_field} uif1
-                    WHERE uif1.name LIKE '%PBL%'
-                    LIMIT 1)
+                    WHERE uid1.fieldid = (
+                        SELECT uif1.id
+                        FROM {user_info_field} uif1
+                        WHERE uif1.name LIKE '%PBL%'
+                        LIMIT 1
+                    )
                 ) s1
                 ON s1.userid = u.id
                 LEFT JOIN (
