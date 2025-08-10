@@ -34,6 +34,7 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
 
     $output = '';
     $dropdownitems = '';
+    require_once(__DIR__ . '/../../user/profile/lib.php');
     $customfields = profile_user_record($USER->id);
     if (isset($customfields->ispartner) && $customfields->ispartner == true) {
         $ispartner = true;
