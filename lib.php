@@ -42,7 +42,8 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
         '</a>';
         $output = '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-light dropdown-toggle" type="button"
-        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-table" aria-hidden="true"></i>' .
         '</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' .
         '<div class="dropdown-divider"></div>' .
@@ -51,21 +52,27 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
 
     if (isset($customfields->departmenthead) && $customfields->departmenthead == true) {
         $ispartner = true;
-        $dropdownitems .= '<a class="dropdown-item" href="' . $CFG->wwwroot . '/local/wb_reports/wbreport/egdepartmenthead/report.php">' . get_string('pluginname', 'wbreport_egpbl') .
+        $dropdownitems .= '<a class="dropdown-item" href="' .
+            $CFG->wwwroot .
+            '/local/wb_reports/wbreport/egdepartmenthead/report.php">' .
+            get_string('pluginname', 'wbreport_egdepartmenthead') .
         '</a>';
         $output = '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-light dropdown-toggle" type="button"
-        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-table" aria-hidden="true"></i>' .
         '</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' .
         '<div class="dropdown-divider"></div>' .
         $dropdownitems . '</div></div>';
     }
 
-    if (!isloggedin() ||
+    if (
+        !isloggedin() ||
         isguestuser() ||
         (!has_capability('local/wb_reports:view', $context) &&
-        !has_capability('local/wb_reports:admin', $context))) {
+        !has_capability('local/wb_reports:admin', $context))
+    ) {
         return $output;
     }
 
@@ -83,7 +90,8 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
 
     $output = '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-light dropdown-toggle" type="button"
-        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-table" aria-hidden="true"></i>' .
         '</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' .
         '<h6 class="dropdown-header">' . get_string('pluginname', 'local_wb_reports') . '</h6>' .
