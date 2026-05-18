@@ -138,6 +138,30 @@ class wbreport extends base {
     }
 
     /**
+     * Determine whether this report should be shown in the navbar for the given user.
+     *
+     * Subplugins may override the default capability-based visibility by defining a
+     * function wbreport_{name}_is_visible_in_navbar(\stdClass $user, \context $context): bool
+     * in their lib.php.
+     *
+     * @param \stdClass $user
+     * @param \context $context
+     * @return bool
+     */
+    public function is_visible_in_navbar(\stdClass $user, \context $context): bool {
+        $libfile = $this->full_path('lib.php');
+        if (file_exists($libfile)) {
+            require_once($libfile);
+            $function = 'wbreport_' . $this->name . '_is_visible_in_navbar';
+            if (function_exists($function)) {
+                return $function($user, $context);
+            }
+        }
+        return has_capability('local/wb_reports:view', $context, $user) ||
+               has_capability('local/wb_reports:admin', $context, $user);
+    }
+
+    /**
      * Get dashboard link.
      * @return string the dashboard link
      * @throws coding_exception

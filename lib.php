@@ -30,57 +30,15 @@
 function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
     global $CFG, $USER;
 
+    if (!isloggedin() || isguestuser()) {
+        return '';
+    }
+
     $context = context_system::instance();
 
-    $output = '';
     $dropdownitems = '';
-    require_once(__DIR__ . '/../../user/profile/lib.php');
-    $customfields = profile_user_record($USER->id);
-    if (isset($customfields->ispartner) && $customfields->ispartner == true) {
-        $ispartner = true;
-        $dropdownitems .= '<a class="dropdown-item" href="' . $CFG->wwwroot . '/local/wb_reports/wbreport/egpbl/report.php">' . get_string('pluginname', 'wbreport_egpbl') .
-        '</a>';
-        $output = '<div class="popover-region nav-link icon-no-margin dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button"
-            id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-table" aria-hidden="true"></i>' .
-        '</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' .
-        '<div class="dropdown-divider"></div>' .
-        $dropdownitems . '</div></div>';
-    }
-
-    if (isset($customfields->departmenthead) && $customfields->departmenthead == true) {
-        $ispartner = true;
-        $dropdownitems .= '<a class="dropdown-item" href="' .
-            $CFG->wwwroot .
-            '/local/wb_reports/wbreport/egdepartmenthead/report.php">' .
-            get_string('pluginname', 'wbreport_egdepartmenthead') .
-        '</a>';
-        $output = '<div class="popover-region nav-link icon-no-margin dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button"
-            id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-table" aria-hidden="true"></i>' .
-        '</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' .
-        '<div class="dropdown-divider"></div>' .
-        $dropdownitems . '</div></div>';
-    }
-
-    if (
-        !isloggedin() ||
-        isguestuser() ||
-        (!has_capability('local/wb_reports:view', $context) &&
-        !has_capability('local/wb_reports:admin', $context))
-    ) {
-        return $output;
-    }
-
-    $output = '';
-    $dropdownitems = '';
-    $skiplist = ['egpbl', 'egdepartmenthead'];
     foreach (core_plugin_manager::instance()->get_plugins_of_type('wbreport') as $plugin) {
-        if (in_array($plugin->name, $skiplist)) {
+        if (!$plugin->is_visible_in_navbar($USER, $context)) {
             continue;
         }
         $dropdownitems .= '<a class="dropdown-item" href="' . $CFG->wwwroot . '/local/wb_reports/wbreport/' .
@@ -88,16 +46,28 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
             '</a>';
     }
 
-    $output = '<div class="popover-region nav-link icon-no-margin dropdown">
+    if (empty($dropdownitems)) {
+        return '';
+    }
+
+    $hasviewcapability = has_capability('local/wb_reports:view', $context, $USER) ||
+                         has_capability('local/wb_reports:admin', $context, $USER);
+
+    if ($hasviewcapability) {
+        $header = '<h6 class="dropdown-header">' . get_string('pluginname', 'local_wb_reports') . '</h6>' .
+            '<a class="dropdown-item" href="' . $CFG->wwwroot . '/local/wb_reports/dashboard.php">' .
+            get_string('dashboard', 'local_wb_reports') . '</a>';
+    } else {
+        $header = '';
+    }
+
+    return '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-light dropdown-toggle" type="button"
             id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-table" aria-hidden="true"></i>' .
         '</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' .
-        '<h6 class="dropdown-header">' . get_string('pluginname', 'local_wb_reports') . '</h6>' .
-        '<a class="dropdown-item" href="' . $CFG->wwwroot . '/local/wb_reports/dashboard.php">' .
-            get_string('dashboard', 'local_wb_reports') . '</a><div class="dropdown-divider"></div>' .
+        $header .
+        '<div class="dropdown-divider"></div>' .
         $dropdownitems . '</div></div>';
-
-    return $output;
 }
