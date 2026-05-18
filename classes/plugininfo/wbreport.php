@@ -33,7 +33,6 @@ use moodle_url;
  * Models subplugin define classes.
  */
 class wbreport extends base {
-
     /**
      * Returns the information about plugin availability
      *
@@ -101,8 +100,6 @@ class wbreport extends base {
      * Pre-uninstall hook.
      */
     public function uninstall_cleanup() {
-        global $CFG;
-
         parent::uninstall_cleanup();
     }
 

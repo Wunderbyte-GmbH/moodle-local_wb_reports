@@ -21,6 +21,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_wb_reports\plugininfo\wbreport;
+
 /**
  * Renders the popup.
  *
@@ -37,6 +39,7 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
     $context = context_system::instance();
 
     $dropdownitems = '';
+    /** @var wbreport $plugin */
     foreach (core_plugin_manager::instance()->get_plugins_of_type('wbreport') as $plugin) {
         if (!$plugin->is_visible_in_navbar($USER, $context)) {
             continue;
