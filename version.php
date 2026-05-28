@@ -25,11 +25,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_wb_reports';
-$plugin->supported = [401, 403];
-$plugin->release = '0.0.6';
-$plugin->version = 2024042600;
-$plugin->requires = 2022041900;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->supported = [405, 501];
+$plugin->release = '0.0.7';
+$plugin->version   = 2026052800;
+$plugin->requires = 2024100700; // Requires this Moodle version. Current: Moodle 4.5.
+$plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
-    'local_wunderbyte_table' => 2024031400,
+    'local_wunderbyte_table' => 2026050100,
 ];
