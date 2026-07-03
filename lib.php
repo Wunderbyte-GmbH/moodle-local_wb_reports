@@ -67,7 +67,8 @@ function local_wb_reports_render_navbar_output(\renderer_base $renderer) {
     return '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-light dropdown-toggle" type="button"
             id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
+            aria-haspopup="true" aria-expanded="false"
+            aria-label="' . s(get_string('pluginname', 'local_wb_reports')) . '">
         <i class="fa fa-table" aria-hidden="true"></i>' .
         '</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' .
         $header .
