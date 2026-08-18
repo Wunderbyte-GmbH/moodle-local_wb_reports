@@ -26,8 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_wb_reports';
 $plugin->supported = [405, 501];
-$plugin->release = '0.0.7';
-$plugin->version   = 2026052800;
+$plugin->release = '0.0.8';
+$plugin->version   = 2026081800;
 $plugin->requires = 2024100700; // Requires this Moodle version. Current: Moodle 4.5.
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
