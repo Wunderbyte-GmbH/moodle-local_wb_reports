@@ -137,6 +137,9 @@ class wbreport extends base {
     /**
      * Determine whether this report should be shown in the navbar for the given user.
      *
+     * The same check is used for the reports dashboard (dashboard.php): a report that
+     * is not visible in the navbar is not listed on the dashboard either.
+     *
      * Subplugins may override the default capability-based visibility by defining a
      * function wbreport_{name}_is_visible_in_navbar(\stdClass $user, \context $context): bool
      * in their lib.php.

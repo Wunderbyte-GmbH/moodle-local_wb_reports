@@ -25,7 +25,9 @@
 
 namespace local_wb_reports\output;
 
+use context_system;
 use core_plugin_manager;
+use local_wb_reports\plugininfo\wbreport;
 use renderer_base;
 use renderable;
 use templatable;
@@ -47,11 +49,20 @@ class dashboard implements renderable, templatable {
      * In the Constructor, we gather all the data we need ans store it in the data property.
      */
     public function __construct() {
+        global $USER;
+
+        $context = context_system::instance();
 
         $data = [];
         $data['reports'] = [];
 
+        /** @var wbreport $plugin */
         foreach (core_plugin_manager::instance()->get_plugins_of_type('wbreport') as $plugin) {
+            // Same visibility rule as in the navbar (see local_wb_reports_render_navbar_output).
+            // Reports that are hidden from the navbar must not show up on the dashboard either.
+            if (!$plugin->is_visible_in_navbar($USER, $context)) {
+                continue;
+            }
             $report['title'] = $plugin->get_report_title($plugin->name);
             $report['description'] = $plugin->get_report_description($plugin->name);
             $report['link'] = $plugin->get_report_link($plugin->name);
