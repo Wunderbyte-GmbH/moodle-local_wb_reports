@@ -21,7 +21,7 @@
  * @copyright   2023 Georg Maißer <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['pluginname'] = 'EG Group: Regional Manager Report';
+$string['pluginname'] = 'EG Group: PBL users report';
 $string['reportidentifier'] = 'egpbl';
 $string['description'] = 'User overview for the regional manager role';
 // General strings.

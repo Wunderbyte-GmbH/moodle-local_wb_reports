@@ -81,7 +81,7 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
                 " AS uniqueid,
                 c.id courseid, c.fullname, l.timeaccess,
                 u.id userid, u.firstname, u.lastname,
-                s1.pbl, s4.pp, s5.tenant,
+                s1.pbl, s5.tenant,
                 CASE
                     WHEN s6.ispartner IS NULL THEN '0'
                     ELSE s6.ispartner
@@ -117,16 +117,6 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
                     GROUP BY cm1.course
                 ) s3
                 ON s3.course = c.id
-                LEFT JOIN (
-                    SELECT uid2.userid, uid2.data AS pp
-                    FROM {user_info_data} uid2
-                    WHERE uid2.fieldid = (SELECT uif2.id
-                    FROM {user_info_field} uif2
-                    -- Partnerprogramm, use pattern to be safe.
-                    WHERE uif2.shortname LIKE '%artner%ogram%'
-                    LIMIT 1)
-                ) s4
-                ON s4.userid = u.id
                 LEFT JOIN (
                     SELECT uid3.userid, uid3.data AS tenant
                     FROM {user_info_data} uid3
@@ -221,7 +211,6 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
         }
         if (has_capability('local/wb_reports:admin', $syscontext)) {
             $headers[] = get_string('tenant', 'wbreport_egregionalmanager');
-            $headers[] = get_string('pp', 'wbreport_egregionalmanager');
             $headers[] = get_string('ispartner', 'wbreport_egregionalmanager');
         }
         $headers[] = get_string('complcount', 'wbreport_egregionalmanager');
@@ -238,7 +227,6 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
         }
         if (has_capability('local/wb_reports:admin', $syscontext)) {
             $columns[] = 'tenant';
-            $columns[] = 'pp';
             $columns[] = 'ispartner';
         }
         $columns[] = 'complcount';
@@ -265,9 +253,6 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
 
         if (has_capability('local/wb_reports:admin', $syscontext)) {
             $standardfilter = new standardfilter('tenant', get_string('tenant', 'wbreport_egregionalmanager'));
-            $table->add_filter($standardfilter);
-
-            $standardfilter = new standardfilter('pp', get_string('pp', 'wbreport_egregionalmanager'));
             $table->add_filter($standardfilter);
 
             $standardfilter = new standardfilter('ispartner', get_string('ispartner', 'wbreport_egregionalmanager'));
@@ -315,7 +300,6 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
         }
         if (has_capability('local/wb_reports:admin', $syscontext)) {
             $fulltextsearchcols[] = 'tenant';
-            $fulltextsearchcols[] = 'pp';
             $fulltextsearchcols[] = 'ispartner';
         }
         $table->define_fulltextsearchcolumns($fulltextsearchcols);
@@ -330,7 +314,6 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
         }
         if (has_capability('local/wb_reports:admin', $syscontext)) {
             $sortablecols[] = 'tenant';
-            $sortablecols[] = 'pp';
             $sortablecols[] = 'ispartner';
         }
         $sortablecols[] = 'complcount';

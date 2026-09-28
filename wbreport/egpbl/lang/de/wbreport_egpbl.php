@@ -21,7 +21,7 @@
  * @copyright   2023 Georg Maißer <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['pluginname'] = 'EG Group: Nutzer/innen Bericht';
+$string['pluginname'] = 'EG Group: PBL Nutzer:innen-Bericht';
 $string['reportidentifier'] = 'egpbl';
 $string['description'] = 'Mit diesem Bericht lassen sich die Nuterz/innen für die Regional Manager Rolle darstellen';
 

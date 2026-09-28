@@ -73,7 +73,6 @@ class egbooking implements renderable, templatable, wbreport_interface {
             get_string('lastname', 'core'),
             get_string('pbl', 'wbreport_egbooking'),
             get_string('tenant', 'wbreport_egbooking'),
-            get_string('pp', 'wbreport_egbooking'),
             get_string('ispartner', 'wbreport_egbooking'),
             get_string('countbooked', 'wbreport_egbooking'),
             get_string('bookedoptions', 'wbreport_egbooking'),
@@ -88,7 +87,6 @@ class egbooking implements renderable, templatable, wbreport_interface {
             'lastname',
             'pbl',
             'tenant',
-            'pp',
             'ispartner',
             'countbooked',
             'bookedoptions',
@@ -100,7 +98,7 @@ class egbooking implements renderable, templatable, wbreport_interface {
         $fields = "m.*";
 
         $from = "(SELECT u.id userid, u.firstname, u.lastname,
-                s1.pbl, s2.pp, s3.tenant,
+                s1.pbl, s3.tenant,
                 CASE
                     WHEN s4.ispartner IS NULL THEN '0'
                     ELSE s4.ispartner
@@ -117,15 +115,6 @@ class egbooking implements renderable, templatable, wbreport_interface {
                     LIMIT 1)
                 ) s1
                 ON s1.userid = u.id
-                LEFT JOIN (
-                    SELECT userid, data AS pp
-                    FROM {user_info_data} uid
-                    WHERE fieldid = (SELECT id
-                    FROM {user_info_field} uif
-                    WHERE shortname LIKE '%artner%ogram%' -- Partnerprogramm, use pattern to be safe.
-                    LIMIT 1)
-                ) s2
-                ON s2.userid = u.id
                 LEFT JOIN (
                     SELECT userid, data AS tenant
                     FROM {user_info_data} uid
@@ -199,9 +188,6 @@ class egbooking implements renderable, templatable, wbreport_interface {
         $standardfilter = new standardfilter('tenant', get_string('tenant', 'wbreport_egbooking'));
         $table->add_filter($standardfilter);
 
-        $standardfilter = new standardfilter('pp', get_string('pp', 'wbreport_egbooking'));
-        $table->add_filter($standardfilter);
-
         $standardfilter = new standardfilter('ispartner', get_string('ispartner', 'wbreport_egbooking'));
         $standardfilter->add_options([
             '1' => '✅',
@@ -230,7 +216,6 @@ class egbooking implements renderable, templatable, wbreport_interface {
             'lastname',
             'pbl',
             'tenant',
-            'pp',
             'ispartner',
             'bookedoptions',
             'canceledoptions',
@@ -243,7 +228,6 @@ class egbooking implements renderable, templatable, wbreport_interface {
             'lastname',
             'pbl',
             'tenant',
-            'pp',
             'ispartner',
             'countbooked',
             'countcanceled',
