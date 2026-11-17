@@ -34,7 +34,7 @@ if (!$context = context_system::instance()) {
 }
 
 $customfields = profile_user_record($USER->id);
-if (!isset($customfields->ispartner) && !$customfields->ispartner != true) {
+if (empty($customfields->ispartner)) {
     throw new moodle_exception('noaccess');
 }
 

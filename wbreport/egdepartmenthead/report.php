@@ -34,7 +34,7 @@ if (!$context = context_system::instance()) {
 }
 
 $customfields = profile_user_record($USER->id);
-if (!isset($customfields->departmenthead) && !$customfields->departmenthead != true) {
+if (empty($customfields->departmenthead)) {
     throw new moodle_exception('noaccess');
 }
 
