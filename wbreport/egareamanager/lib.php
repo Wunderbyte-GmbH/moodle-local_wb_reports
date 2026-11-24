@@ -31,5 +31,12 @@
  * @return bool
  */
 function wbreport_egareamanager_is_visible_in_navbar(\stdClass $user, \context $context): bool {
-    return !empty(\wbreport_egareamanager\egareamanager::get_area_pbls($user->id));
+    global $CFG;
+    require_once($CFG->dirroot . '/user/profile/lib.php');
+
+    // Called on every page via the navbar, so do not rely on class autoloading here
+    // (it fails while the component cache is stale, e.g. right after a checkout).
+    $customfields = profile_user_record($user->id, false);
+    $raw = (string) ($customfields->allowedpbls ?? '');
+    return !empty(preg_split('/[\s,;]+/', $raw, -1, PREG_SPLIT_NO_EMPTY));
 }
