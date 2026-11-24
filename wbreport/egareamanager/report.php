@@ -33,7 +33,7 @@ if (!$context = context_system::instance()) {
     throw new moodle_exception('badcontext');
 }
 
-$areapbls = \wbreport_egareamanager\egareamanager::get_area_pbls($USER->id);
+$areapbls = \wbreport_egareamanager\local\areapbls::get($USER->id);
 if (empty($areapbls)) {
     throw new moodle_exception('noaccess');
 }

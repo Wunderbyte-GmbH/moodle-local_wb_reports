@@ -29,28 +29,5 @@ use local_wb_reports\plugininfo\wbreport;
 use local_wb_reports\plugininfo\wbreport_interface;
 
 class egareamanager extends wbreport implements wbreport_interface {
-
-    /** @var string Shortname of the custom profile field holding the PBLs of the area manager's field. */
-    const PBLFIELD = 'allowedpbls';
-
-    /**
-     * Returns the PBLs an area manager is responsible for.
-     *
-     * The values in the profile field may be separated by spaces, commas, semicolons or line breaks.
-     *
-     * @param int $userid
-     * @return array list of unique PBLs, empty if the user is no area manager
-     */
-    public static function get_area_pbls(int $userid): array {
-        global $CFG;
-        require_once($CFG->dirroot . '/user/profile/lib.php');
-
-        $customfields = profile_user_record($userid, false);
-        $raw = $customfields->{self::PBLFIELD} ?? '';
-        if (empty($raw)) {
-            return [];
-        }
-        $pbls = preg_split('/[\\s,;]+/', (string) $raw, -1, PREG_SPLIT_NO_EMPTY);
-        return array_values(array_unique($pbls));
-    }
+    // The plugin can implement functions defined in the interface here or extend the general plugin type.
 }

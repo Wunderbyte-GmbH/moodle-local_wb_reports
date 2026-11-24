@@ -121,7 +121,7 @@ class egareamanager implements renderable, templatable, wbreport_interface {
 
         // Determine the $where part.
         $where = "1=0"; // By default, we show nothing.
-        $areapbls = \wbreport_egareamanager\egareamanager::get_area_pbls($USER->id);
+        $areapbls = \wbreport_egareamanager\local\areapbls::get($USER->id);
         if (!empty($areapbls)) {
             [$inpbls, $inpblsparams] = $DB->get_in_or_equal($areapbls, SQL_PARAMS_NAMED, 'pbl');
             $where = "m.pbl $inpbls";
