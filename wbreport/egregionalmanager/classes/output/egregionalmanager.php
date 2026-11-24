@@ -173,9 +173,9 @@ class egregionalmanager implements renderable, templatable, wbreport_interface {
                     $allpbls = [];
                     foreach ($tmpusers as $tmpuser) {
                         profile_load_custom_fields($tmpuser);
-                        $allowedpbls = $tmpuser->profile['allowedpbls'];
-                        $allowedpbls = str_replace(' ', '', $allowedpbls);
-                        $pbls = preg_split('/\s+/', $allowedpbls, -1, PREG_SPLIT_NO_EMPTY);
+                        // PBLs may be separated by spaces, commas, semicolons or line breaks.
+                        $allowedpbls = $tmpuser->profile['allowedpbls'] ?? '';
+                        $pbls = preg_split('/[\s,;]+/', $allowedpbls, -1, PREG_SPLIT_NO_EMPTY);
                         $allpbls = array_merge($allpbls, $pbls);
                     }
                     if (!empty($user->profile['partnerid'])) { // Shortname for PBL is partnerid.
